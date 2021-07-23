@@ -3,19 +3,18 @@
 package strings
 
 import (
-	"strings"
-
 	"github.com/evenlab/go-kit/bytes"
+	"strings"
 )
 
 // RandString returns random generated string with given size.
 func RandString(size int) string {
-	s := GetDictRand()
-	blob, builder, dictSize := bytes.RandBytes(size), strings.Builder{}, len(s)
+	rwDictMutex.Lock()
+	blob, builder, dictSize := bytes.RandBytes(size), strings.Builder{}, len(dictRandChars)
 	for i := 0; i < size; i++ {
-		blob[i] = s[int(blob[i])%dictSize]
+		blob[i] = dictRandChars[int(blob[i])%dictSize]
 	}
-
+	rwDictMutex.Unlock()
 	_, _ = builder.Write(blob)
 
 	return builder.String()
