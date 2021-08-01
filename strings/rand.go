@@ -3,12 +3,13 @@
 package strings
 
 import (
-	"github.com/evenlab/go-kit/bytes"
 	"strings"
+
+	"github.com/evenlab/go-kit/bytes"
 )
 
-// RandString returns random generated string with given size.(With mutex)
-func RandString_KIT30(size int) string {
+// RandString returns random generated string with given size.(With mutex).
+func RandStringKIT30(size int) string {
 	rwDictMutex.Lock()
 	blob, builder, dictSize := bytes.RandBytes(size), strings.Builder{}, len(dictRandChars)
 	for i := 0; i < size; i++ {

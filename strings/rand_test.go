@@ -17,11 +17,11 @@ func Benchmark_RandString(b *testing.B) {
 	}
 }
 
-func Benchmark_RandString_KIT30(b *testing.B) {
+func Benchmark_RandStringKIT30(b *testing.B) {
 	const size = 1024
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = RandString_KIT30(size)
+		_ = RandStringKIT30(size)
 	}
 }
 
