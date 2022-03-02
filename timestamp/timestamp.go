@@ -3,7 +3,7 @@
 package timestamp
 
 import (
-	"fmt"
+	"strconv"
 	"time"
 
 	json "github.com/json-iterator/go"
@@ -98,7 +98,9 @@ func (t *Timestamp) String() string {
 
 // UnixNanoStr returns string representation as string of UnixNano.
 func (t *Timestamp) UnixNanoStr() string {
-	return fmt.Sprintf("%v", t.Time.UnixNano())
+	const base = 10
+
+	return strconv.FormatInt(t.Time.UnixNano(), base)
 }
 
 // Unmarshal implements unmarshaler interface for types

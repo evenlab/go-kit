@@ -95,7 +95,8 @@ func NewContext() Context {
 
 		sig := <-stop
 
-		print("\r") // carriage return
+		// carriage return
+		print("\r") //nolint:forbidigo
 		log.Printf("Received %s signal, shutting down...", sig)
 		cancel()
 	}

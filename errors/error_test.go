@@ -70,7 +70,7 @@ func Benchmark_FmtErrorf_Wrap(b *testing.B) {
 	wrapErr := New(wrapErrorMsg)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = fmt.Errorf(wrapFmtLibFormat, testErrorMsg, wrapErr)
+		_ = fmt.Errorf(wrapFmtLibFormat, testErrorMsg, wrapErr) //nolint:forbidigo
 	}
 }
 
