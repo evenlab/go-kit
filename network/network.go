@@ -15,7 +15,7 @@ func UpInterfaces(fl ...net.Flags) (l []net.Interface) {
 		flags |= f
 	}
 
-	list, _ := net.Interfaces()
+	list, _ := net.Interfaces() //nolint:errcheck
 	for _, i := range list {
 		switch {
 		case i.Flags&net.FlagUp == 0:
@@ -36,8 +36,8 @@ func UpInterfaces(fl ...net.Flags) (l []net.Interface) {
 // of the system's up network interfaces.
 func IPAddresses() (l []net.IP) {
 	for _, i := range UpInterfaces() {
-		addrs, _ := i.Addrs()
-		for _, addr := range addrs {
+		list, _ := i.Addrs() //nolint:errcheck
+		for _, addr := range list {
 			ip := strings.Split(addr.String(), "/")[0] // trim ip mask
 			l = append(l, net.ParseIP(ip))
 		}
