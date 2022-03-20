@@ -1,6 +1,6 @@
 name: Go
 
-on: [push]
+on: [ push ]
 
 jobs:
 
@@ -12,19 +12,40 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16
+          go-version: 1.17
 
-      - name: Build
-        run: go build -v ./...
+      - name: Test base58
+        run: cd ./base58 && go test -race ./...
 
-      - name: Test
-        run: go test -v ./...
-  golangci:
-    name: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.39
+      - name: Test bytes
+        run: cd ./bytes && go test -race ./...
+
+      - name: Test context
+        run: cd ./context && go test -race ./...
+
+      - name: Test crypto
+        run: cd ./crypto && go test -race ./...
+
+      - name: Test drive
+        run: cd ./drive && go test -race ./...
+
+      - name: Test equal
+        run: cd ./equal && go test -race ./...
+
+      - name: Test errors
+        run: cd ./errors && go test -race ./...
+
+      - name: Test merkle
+        run: cd ./merkle && go test -race ./...
+
+      - name: Test network
+        run: cd ./network && go test -race ./...
+
+      - name: Test strings
+        run: cd ./strings && go test -race ./...
+
+      - name: Test timestamp
+        run: cd ./timestamp && go test -race ./...
+
+      - name: Test zero
+        run: cd ./zero && go test -race ./...
