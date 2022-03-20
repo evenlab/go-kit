@@ -7,11 +7,11 @@ import (
 	"log"
 	"testing"
 
-	. "github.com/evenlab/go-kit/errors"
+	kit "github.com/evenlab/go-kit/errors"
 )
 
 func Benchmark_wrapper_Error(b *testing.B) {
-	err := WrapErr(wrapErrorMsg, New(testErrorMsg))
+	err := kit.WrapErr(wrapErrorMsg, kit.New(testErrorMsg))
 	if err == nil {
 		log.Fatal("want error interface but got nil value")
 	}
@@ -22,8 +22,8 @@ func Benchmark_wrapper_Error(b *testing.B) {
 }
 
 func Benchmark_wrapper_Unwrap(b *testing.B) {
-	wrapErr := WrapErr(wrapErrorMsg, New(testErrorMsg))
-	err, ok := wrapErr.(Wrapper) // nolint: errorlint
+	wrapErr := kit.WrapErr(wrapErrorMsg, kit.New(testErrorMsg))
+	err, ok := wrapErr.(kit.Wrapper) // nolint: errorlint
 	if !ok {
 		log.Fatal("got not wrapper interface")
 	}
@@ -57,7 +57,7 @@ func Test_wrapper_Error(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := WrapErr(testErrorMsg, New(wrapErrorMsg)).Error()
+			got := kit.WrapErr(testErrorMsg, kit.New(wrapErrorMsg)).Error()
 			if (got != test.want) != test.wantErr {
 				t.Errorf("Error() got: %v | want: %v", got, test.wantErr)
 			}
@@ -68,8 +68,8 @@ func Test_wrapper_Error(t *testing.T) {
 func Test_wrapper_Unwrap(t *testing.T) {
 	t.Parallel()
 
-	testErr := New(testErrorMsg)
-	wrapErr := WrapErr(wrapErrorMsg, testErr)
+	testErr := kit.New(testErrorMsg)
+	wrapErr := kit.WrapErr(wrapErrorMsg, testErr)
 
 	tests := [2]struct {
 		name    string
@@ -80,13 +80,13 @@ func Test_wrapper_Unwrap(t *testing.T) {
 		{
 			name:    "TRUE",
 			testErr: testErr,
-			wrapErr: WrapErr(wrapErrorMsg, wrapErr),
+			wrapErr: kit.WrapErr(wrapErrorMsg, wrapErr),
 			want:    true,
 		},
 		{
 			name:    "FALSE",
 			testErr: testErr,
-			wrapErr: WrapErr(wrapErrorMsg, New(testErrorMsg)),
+			wrapErr: kit.WrapErr(wrapErrorMsg, kit.New(testErrorMsg)),
 			want:    false,
 		},
 	}
