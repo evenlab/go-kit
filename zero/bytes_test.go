@@ -6,14 +6,15 @@ import (
 	"testing"
 
 	"github.com/evenlab/go-kit/bytes"
-	. "github.com/evenlab/go-kit/zero"
+
+	zero "github.com/evenlab/go-kit"
 )
 
 func Benchmark_Bytea28(b *testing.B) {
 	b224 := [28]byte{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		Bytea28(&b224)
+		zero.Bytea28(&b224)
 	}
 }
 
@@ -21,7 +22,7 @@ func Benchmark_Bytea32(b *testing.B) {
 	b256 := [32]byte{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		Bytea32(&b256)
+		zero.Bytea32(&b256)
 	}
 }
 
@@ -29,7 +30,7 @@ func Benchmark_Bytea64(b *testing.B) {
 	b512 := [64]byte{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		Bytea64(&b512)
+		zero.Bytea64(&b512)
 	}
 }
 
@@ -37,7 +38,7 @@ func Benchmark_Bytes(b *testing.B) {
 	blob := bytes.RandBytes(1024)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		Bytes(blob)
+		zero.Bytes(blob)
 	}
 }
 
@@ -62,7 +63,7 @@ func Test_Bytea28(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			Bytea28(&test.b224)
+			zero.Bytea28(&test.b224)
 			for i := range test.b224 {
 				if test.b224[i] != 0 {
 					t.Errorf("Bytea28() got: %v | want: [28]byte zeros filled", test.b224)
@@ -94,7 +95,7 @@ func Test_Bytea32(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			Bytea32(&test.b256)
+			zero.Bytea32(&test.b256)
 			for i := range test.b256 {
 				if test.b256[i] != 0 {
 					t.Errorf("Bytea32() got: %v | want: [32]byte zeros filled", test.b256)
@@ -126,7 +127,7 @@ func Test_Bytea64(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			Bytea64(&test.b512)
+			zero.Bytea64(&test.b512)
 			for i := range test.b512 {
 				if test.b512[i] != 0 {
 					t.Errorf("Bytea64() got: %v | want: [64]byte zeros filled", test.b512)
@@ -156,7 +157,7 @@ func Test_Bytes(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			Bytes(test.blob)
+			zero.Bytes(test.blob)
 			for i := range test.blob {
 				if test.blob[i] != 0 {
 					t.Errorf("Bytes() got: %v | want: []byte zeros filled", test.blob)
