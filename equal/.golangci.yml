@@ -30,7 +30,7 @@ linters-settings:
     # put imports beginning with prefix after 3rd-party packages;
     # only support one prefix
     # if not set, use goimports.local-prefixes
-    local-prefixes: github.com/evenlab/go-kit
+    local-prefixes: github.com/evenlab/go-kit/equal
     # Checks that no inline Comments are present.
     # Default: false
     no-inlineComments: true

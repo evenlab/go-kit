@@ -8,7 +8,8 @@ import (
 
 	"github.com/evenlab/go-kit/crypto"
 	"github.com/evenlab/go-kit/errors"
-	. "github.com/evenlab/go-kit/merkle"
+
+	"github.com/evenlab/go-kit/merkle"
 )
 
 func Benchmark_BuildTreeStore(b *testing.B) {
@@ -16,7 +17,7 @@ func Benchmark_BuildTreeStore(b *testing.B) {
 	list := mockIterable(size)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		if _, err := BuildTreeStore(list); err != nil {
+		if _, err := merkle.BuildTreeStore(list); err != nil {
 			b.Fatal(err)
 		}
 	}
@@ -39,8 +40,8 @@ func Test_BuildTreeStore(t *testing.T) {
 	tree, iter := mockTreeStoreCase5()
 	tests := [4]struct {
 		name    string
-		iter    Iterator
-		want    TreeStore
+		iter    merkle.Iterator
+		want    merkle.TreeStore
 		wantErr error
 	}{
 		{
@@ -55,12 +56,12 @@ func Test_BuildTreeStore(t *testing.T) {
 		},
 		{
 			name:    errors.ErrZeroSizeValueMsg + "_iter_ERR",
-			iter:    NewIterator(),
+			iter:    merkle.NewIterator(),
 			wantErr: errors.ErrZeroSizeValue(),
 		},
 		{
 			name:    errors.ErrZeroSizeValueMsg + "_item_ERR",
-			iter:    NewIterator(empty, empty, empty),
+			iter:    merkle.NewIterator(empty, empty, empty),
 			wantErr: errors.ErrZeroSizeValue(),
 		},
 	}
@@ -70,7 +71,7 @@ func Test_BuildTreeStore(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := BuildTreeStore(test.iter)
+			got, err := merkle.BuildTreeStore(test.iter)
 			if !errors.Is(err, test.wantErr) {
 				t.Errorf("BuildTreeStore() error: %v | want: %v", err, test.wantErr)
 				return
@@ -90,7 +91,7 @@ func Test_TreeStore_Root(t *testing.T) {
 
 	tests := [3]struct {
 		name    string
-		tree    TreeStore
+		tree    merkle.TreeStore
 		want    crypto.Hash256
 		wantErr error
 	}{
@@ -105,12 +106,12 @@ func Test_TreeStore_Root(t *testing.T) {
 			want: treeCase5[len(treeCase5)-1], // root is the last element in the the list
 		},
 		{
-			name: ErrMerkleTreeBuiltImproperlyMsg + "_ERR",
-			tree: TreeStore{ // mock tree store with size under MinTreeStoreSize
+			name: merkle.ErrMerkleTreeBuiltImproperlyMsg + "_ERR",
+			tree: merkle.TreeStore{ // mock tree store with size under MinTreeStoreSize
 				crypto.Hash256{},
 				crypto.Hash256{},
 			},
-			wantErr: ErrMerkleTreeBuiltImproperly(),
+			wantErr: merkle.ErrMerkleTreeBuiltImproperly(),
 		},
 	}
 

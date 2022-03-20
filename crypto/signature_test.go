@@ -10,43 +10,42 @@ import (
 	json "github.com/json-iterator/go"
 	"google.golang.org/protobuf/proto"
 
+	"github.com/evenlab/go-kit/crypto"
 	"github.com/evenlab/go-kit/crypto/proto/pb"
-
-	. "github.com/evenlab/go-kit/crypto"
 )
 
 func Benchmark_NewSignature(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	blob, err := sign.Raw()
 	if err != nil {
 		b.Fatal(err)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = NewSignature(blob)
+		_ = crypto.NewSignature(blob)
 	}
 }
 
 func Benchmark_DecodeSignature(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	pbuf := sign.Encode()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = DecodeSignature(pbuf)
+		_ = crypto.DecodeSignature(pbuf)
 	}
 }
 
 func Benchmark_signature_Decode(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	pbuf := sign.Encode()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		NewSignature(nil).Decode(pbuf)
+		crypto.NewSignature(nil).Decode(pbuf)
 	}
 }
 
 func Benchmark_signature_Encode(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = sign.Encode()
@@ -54,7 +53,7 @@ func Benchmark_signature_Encode(b *testing.B) {
 }
 
 func Benchmark_signature_Equals(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = sign.Equals(sign)
@@ -62,7 +61,7 @@ func Benchmark_signature_Equals(b *testing.B) {
 }
 
 func Benchmark_signature_Marshal(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := sign.Marshal(); err != nil {
@@ -72,7 +71,7 @@ func Benchmark_signature_Marshal(b *testing.B) {
 }
 
 func Benchmark_signature_MarshalJSON(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := sign.MarshalJSON(); err != nil {
@@ -82,7 +81,7 @@ func Benchmark_signature_MarshalJSON(b *testing.B) {
 }
 
 func Benchmark_signature_Raw(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := sign.Raw(); err != nil {
@@ -92,7 +91,7 @@ func Benchmark_signature_Raw(b *testing.B) {
 }
 
 func Benchmark_signature_String(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = sign.String()
@@ -100,22 +99,22 @@ func Benchmark_signature_String(b *testing.B) {
 }
 
 func Benchmark_signature_Unmarshal(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	blob, _ := sign.Marshal()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		if err := NewSignature(nil).Unmarshal(blob); err != nil {
+		if err := crypto.NewSignature(nil).Unmarshal(blob); err != nil {
 			b.Fatal(err)
 		}
 	}
 }
 
 func Benchmark_signature_UnmarshalJSON(b *testing.B) {
-	sign, _ := mockSignature(Ed25519)
+	sign, _ := mockSignature(crypto.Ed25519)
 	blob, _ := sign.MarshalJSON()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		if err := NewSignature(nil).UnmarshalJSON(blob); err != nil {
+		if err := crypto.NewSignature(nil).UnmarshalJSON(blob); err != nil {
 			b.Fatal(err)
 		}
 	}
@@ -128,12 +127,12 @@ func Test_DecodeSignature(t *testing.T) {
 		testCase struct {
 			name string
 			pbuf *pb.Signature
-			want Signature
+			want crypto.Signature
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len())
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -149,7 +148,7 @@ func Test_DecodeSignature(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := DecodeSignature(test.pbuf); !reflect.DeepEqual(got, test.want) {
+			if got := crypto.DecodeSignature(test.pbuf); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("Decode() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -162,14 +161,14 @@ func Test_signature_Equals(t *testing.T) {
 	type (
 		testCase struct {
 			name string
-			sign Signature
+			sign crypto.Signature
 			blob []byte
 			want bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()*2)
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -191,7 +190,7 @@ func Test_signature_Equals(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := NewSignature(test.blob)
+			got := crypto.NewSignature(test.blob)
 			if got := got.Equals(test.sign); got != test.want {
 				t.Errorf("Equals() got: %v | want: %v", got, test.want)
 			}
@@ -212,7 +211,7 @@ func Test_signature_Marshal(t *testing.T) {
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len())
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -230,7 +229,7 @@ func Test_signature_Marshal(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := NewSignature(test.blob).Marshal()
+			got, err := crypto.NewSignature(test.blob).Marshal()
 			if (err != nil) != test.wantErr {
 				t.Errorf("Marshal() error: %v | want: %v", err, test.wantErr)
 				return
@@ -255,7 +254,7 @@ func Test_signature_MarshalJSON(t *testing.T) {
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len())
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -273,7 +272,7 @@ func Test_signature_MarshalJSON(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := NewSignature(test.blob).MarshalJSON()
+			got, err := crypto.NewSignature(test.blob).MarshalJSON()
 			if (err != nil) != test.wantErr {
 				t.Errorf("MarshalJSON() error: %v | want: %v", err, test.wantErr)
 				return
@@ -291,13 +290,13 @@ func Test_signature_Decode(t *testing.T) {
 	type (
 		testCase struct {
 			name string
-			want Signature
+			want crypto.Signature
 			pbuf *pb.Signature
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len())
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -313,7 +312,7 @@ func Test_signature_Decode(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := NewSignature(nil)
+			got := crypto.NewSignature(nil)
 			got.Decode(test.pbuf)
 			if !reflect.DeepEqual(got, test.want) {
 				t.Errorf("Decode() got: %#v | want: %#v", got, test.want)
@@ -328,14 +327,14 @@ func Test_signature_Encode(t *testing.T) {
 	type (
 		testCase struct {
 			name string
-			sign Signature
+			sign crypto.Signature
 			want *pb.Signature
 		}
 
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len())
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -365,27 +364,27 @@ func Test_signature_Raw(t *testing.T) {
 	type (
 		testCase struct {
 			name    string
-			sign    Signature
+			sign    crypto.Signature
 			want    []byte
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		signable, _ := mockSignable(algo, 1024)
 		tests = append(tests, testCase{
 			name: name + "_OK",
-			sign: NewSignature(signable.Blob),
+			sign: crypto.NewSignature(signable.Blob),
 			want: signable.Blob,
 		})
 	}
 
 	tests = append(tests, testCase{
 		name:    "ERR",
-		sign:    NewSignature(nil),
+		sign:    crypto.NewSignature(nil),
 		wantErr: true,
 	})
 
@@ -412,13 +411,13 @@ func Test_signature_String(t *testing.T) {
 	type (
 		testCase struct {
 			name string
-			sign Signature
+			sign crypto.Signature
 			want string
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len())
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -429,7 +428,7 @@ func Test_signature_String(t *testing.T) {
 			want: hex.EncodeToString(blob),
 		}, testCase{
 			name: name + "_nil_OK",
-			sign: NewSignature(nil),
+			sign: crypto.NewSignature(nil),
 			want: "<nil>",
 		})
 	}
@@ -453,13 +452,13 @@ func Test_signature_Unmarshal(t *testing.T) {
 		testCase struct {
 			name    string
 			blob    []byte
-			want    Signature
+			want    crypto.Signature
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -482,7 +481,7 @@ func Test_signature_Unmarshal(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := NewSignature(nil)
+			got := crypto.NewSignature(nil)
 			if err := got.Unmarshal(test.blob); (err != nil) != test.wantErr {
 				t.Errorf("Unmarshal() error: %v | want: %v", err, test.wantErr)
 			}
@@ -500,13 +499,13 @@ func Test_signature_UnmarshalJSON(t *testing.T) {
 		testCase struct {
 			name    string
 			blob    []byte
-			want    Signature
+			want    crypto.Signature
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		sign, _ := mockSignature(algo)
@@ -529,7 +528,7 @@ func Test_signature_UnmarshalJSON(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := NewSignature(nil)
+			got := crypto.NewSignature(nil)
 			if err := got.UnmarshalJSON(test.blob); (err != nil) != test.wantErr {
 				t.Errorf("UnmarshalJSON() error: %v | want: %v", err, test.wantErr)
 			}

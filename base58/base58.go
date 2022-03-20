@@ -19,7 +19,7 @@ const (
 
 // Decode decodes base58 encoded bytes.
 func Decode(blob []byte) ([]byte, error) {
-	// nolint: gofmt, goimports
+	// nolint: goimports
 	decodeTable := [256]byte{
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,

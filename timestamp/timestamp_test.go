@@ -10,8 +10,8 @@ import (
 	json "github.com/json-iterator/go"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/evenlab/go-kit"
-	"github.com/evenlab/go-kit/proto/pb"
+	"github.com/evenlab/go-kit/timestamp"
+	"github.com/evenlab/go-kit/timestamp/proto/pb"
 )
 
 const (

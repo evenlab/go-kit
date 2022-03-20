@@ -10,7 +10,7 @@ import (
 type (
 	// Iterable represents interface for types that implements Iterator interface.
 	Iterable interface {
-		// Iterator returns Iterator interface for types which can iterate by themselves.
+		// MerkleIter returns Iterator interface for types which can iterate by themselves.
 		MerkleIter() Iterator
 	}
 

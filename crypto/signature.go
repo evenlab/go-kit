@@ -5,18 +5,18 @@ package crypto
 import (
 	"encoding/hex"
 
+	"github.com/evenlab/go-kit/equal"
+	"github.com/evenlab/go-kit/errors"
 	json "github.com/json-iterator/go"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/evenlab/go-kit/crypto/proto/pb"
-	"github.com/evenlab/go-kit/equal"
-	"github.com/evenlab/go-kit/errors"
 )
 
 type (
 	// Signature represents signature interface.
 	Signature interface {
-		// Embedded equaler interface.
+		// Equaler is embedded equaler interface.
 		equal.Equaler
 
 		// Decode sets decoded data from protobuf message.

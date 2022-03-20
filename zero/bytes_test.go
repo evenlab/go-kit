@@ -7,7 +7,7 @@ import (
 
 	"github.com/evenlab/go-kit/bytes"
 
-	zero "github.com/evenlab/go-kit"
+	"github.com/evenlab/go-kit/zero"
 )
 
 func Benchmark_Bytea28(b *testing.B) {

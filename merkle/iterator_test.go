@@ -10,7 +10,8 @@ import (
 	"github.com/evenlab/go-kit/bytes"
 	"github.com/evenlab/go-kit/crypto"
 	"github.com/evenlab/go-kit/errors"
-	. "github.com/evenlab/go-kit/merkle"
+
+	"github.com/evenlab/go-kit/merkle"
 )
 
 func Benchmark_NewIterator(b *testing.B) {
@@ -21,7 +22,7 @@ func Benchmark_NewIterator(b *testing.B) {
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = NewIterator(data...)
+		_ = merkle.NewIterator(data...)
 	}
 }
 
@@ -31,7 +32,7 @@ func Benchmark_Iterator_HasherNext(b *testing.B) {
 	for idx := range data {
 		data[idx] = make([]byte, 1024)
 	}
-	iter := NewIterator(data...)
+	iter := merkle.NewIterator(data...)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = iter.HasherNext()
@@ -46,7 +47,7 @@ func Benchmark_Iterator_HasherNext_Hash(b *testing.B) {
 		data[idx] = make([]byte, 1024)
 		copy(data[idx], blob)
 	}
-	iter := NewIterator(data...)
+	iter := merkle.NewIterator(data...)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if item := iter.HasherNext(); item != nil {
@@ -58,7 +59,7 @@ func Benchmark_Iterator_HasherNext_Hash(b *testing.B) {
 }
 
 func Benchmark_Iterator_HasNext(b *testing.B) {
-	iter := NewIterator(make([]byte, 0))
+	iter := merkle.NewIterator(make([]byte, 0))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = iter.HasNext()
@@ -66,7 +67,7 @@ func Benchmark_Iterator_HasNext(b *testing.B) {
 }
 
 func Benchmark_Len(b *testing.B) {
-	iter := NewIterator(make([]byte, 0))
+	iter := merkle.NewIterator(make([]byte, 0))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = iter.Len()
@@ -74,7 +75,7 @@ func Benchmark_Len(b *testing.B) {
 }
 
 func Benchmark_Rewind(b *testing.B) {
-	iter := NewIterator()
+	iter := merkle.NewIterator()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = iter.Rewind()
@@ -85,22 +86,22 @@ func Test_NewIterator(t *testing.T) {
 	t.Parallel()
 
 	size := 1024
-	data, list := make([][]byte, size), make([]IterItem, size)
+	data, list := make([][]byte, size), make([]merkle.IterItem, size)
 	for idx := range data {
 		data[idx] = bytes.RandBytes(size)
-		list[idx] = make(IterItem, size)
+		list[idx] = make(merkle.IterItem, size)
 		copy(list[idx], data[idx])
 	}
 
 	tests := [1]struct {
 		name string
 		data [][]byte
-		want Iterator
+		want merkle.Iterator
 	}{
 		{
 			name: "OK",
 			data: data,
-			want: &IterStub{List: list},
+			want: &merkle.IterStub{List: list},
 		},
 	}
 
@@ -109,7 +110,7 @@ func Test_NewIterator(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := NewIterator(test.data...); !reflect.DeepEqual(got, test.want) {
+			if got := merkle.NewIterator(test.data...); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("NewIterator() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -121,21 +122,21 @@ func Test_Iterator_HasherNext(t *testing.T) {
 
 	size := 1024
 	blob := bytes.RandBytes(size)
-	item := IterItem(blob)
+	item := merkle.IterItem(blob)
 
 	tests := [2]struct {
 		name string
-		iter Iterator
+		iter merkle.Iterator
 		want crypto.Hasher
 	}{
 		{
 			name: "OK",
-			iter: NewIterator(blob),
+			iter: merkle.NewIterator(blob),
 			want: &item,
 		},
 		{
 			name: "nil_OK",
-			iter: NewIterator(),
+			iter: merkle.NewIterator(),
 			want: nil,
 		},
 	}
@@ -159,18 +160,18 @@ func Test_Iterator_HasherNext_Hash(t *testing.T) {
 	blob := bytes.RandBytes(size)
 	tests := [2]struct {
 		name    string
-		iter    Iterator
+		iter    merkle.Iterator
 		want    crypto.Hash256
 		wantErr error
 	}{
 		{
 			name: "OK",
-			iter: NewIterator(blob),
+			iter: merkle.NewIterator(blob),
 			want: crypto.NewHash256(blob),
 		},
 		{
 			name:    errors.ErrZeroSizeValueMsg + "_ERR",
-			iter:    NewIterator(make([]byte, 0)),
+			iter:    merkle.NewIterator(make([]byte, 0)),
 			wantErr: errors.ErrZeroSizeValue(),
 		},
 	}
@@ -197,17 +198,17 @@ func Test_Iterator_HasNext(t *testing.T) {
 
 	tests := [2]struct {
 		name string
-		iter Iterator
+		iter merkle.Iterator
 		want bool
 	}{
 		{
 			name: "TRUE",
-			iter: NewIterator(make([]byte, 0)),
+			iter: merkle.NewIterator(make([]byte, 0)),
 			want: true,
 		},
 		{
 			name: "FALSE",
-			iter: NewIterator(),
+			iter: merkle.NewIterator(),
 			want: false,
 		},
 	}
@@ -229,17 +230,17 @@ func Test_Iterator_Len(t *testing.T) {
 
 	tests := [2]struct {
 		name string
-		iter Iterator
+		iter merkle.Iterator
 		want int
 	}{
 		{
 			name: "OK",
-			iter: NewIterator(make([]byte, 0)),
+			iter: merkle.NewIterator(make([]byte, 0)),
 			want: 1,
 		},
 		{
 			name: "zero_OK",
-			iter: NewIterator(),
+			iter: merkle.NewIterator(),
 			want: 0,
 		},
 	}
@@ -261,7 +262,7 @@ func Test_Iterator_Rewind(t *testing.T) {
 
 	size := 1024
 	blob := bytes.RandBytes(size)
-	iter := NewIterator(blob)
+	iter := merkle.NewIterator(blob)
 
 	for iter.HasNext() { // enforce fast forward of iter list
 		_ = iter.HasherNext()
@@ -269,13 +270,13 @@ func Test_Iterator_Rewind(t *testing.T) {
 
 	tests := []struct {
 		name string
-		iter Iterator
-		want Iterator
+		iter merkle.Iterator
+		want merkle.Iterator
 	}{
 		{
 			name: "OK",
 			iter: iter,
-			want: NewIterator(blob),
+			want: merkle.NewIterator(blob),
 		},
 	}
 

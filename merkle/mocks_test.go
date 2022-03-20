@@ -7,10 +7,11 @@ import (
 
 	"github.com/evenlab/go-kit/bytes"
 	"github.com/evenlab/go-kit/crypto"
-	. "github.com/evenlab/go-kit/merkle"
+
+	"github.com/evenlab/go-kit/merkle"
 )
 
-func mockTreeStoreCase1() (TreeStore, Iterator) {
+func mockTreeStoreCase1() (merkle.TreeStore, merkle.Iterator) {
 	const size = 1
 	var err error
 
@@ -24,7 +25,7 @@ func mockTreeStoreCase1() (TreeStore, Iterator) {
 
 	root := crypto.NewHash256(h[0][:], h[0][:]) // double one use h[0] because we've no h[1]
 
-	tree := TreeStore{
+	tree := merkle.TreeStore{
 		h[0], h256,
 		root,
 	}
@@ -34,7 +35,7 @@ func mockTreeStoreCase1() (TreeStore, Iterator) {
 	return tree, iter.Rewind()
 }
 
-func mockTreeStoreCase5() (TreeStore, Iterator) {
+func mockTreeStoreCase5() (merkle.TreeStore, merkle.Iterator) {
 	const size = 5
 	var err error
 
@@ -57,7 +58,7 @@ func mockTreeStoreCase5() (TreeStore, Iterator) {
 
 	root := crypto.NewHash256(h0h1h2h3[:], h4h5h6h7[:])
 
-	tree := TreeStore{
+	tree := merkle.TreeStore{
 		h[0], h[1], h[2], h[3], h[4], h256, h256, h256,
 		h0h1, h2h3, h4h5, h256,
 		h0h1h2h3, h4h5h6h7,
@@ -69,11 +70,11 @@ func mockTreeStoreCase5() (TreeStore, Iterator) {
 	return tree, iter.Rewind()
 }
 
-func mockIterable(size int) Iterator {
+func mockIterable(size int) merkle.Iterator {
 	items := make([][]byte, size)
 	for idx := range items {
 		items[idx] = bytes.RandBytes(1)
 	}
 
-	return NewIterator(items...)
+	return merkle.NewIterator(items...)
 }

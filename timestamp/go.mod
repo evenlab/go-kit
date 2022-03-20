@@ -1,4 +1,4 @@
-module github.com/evenlab/go-kit
+module github.com/evenlab/go-kit/timestamp
 
 go 1.17
 
