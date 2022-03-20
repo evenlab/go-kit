@@ -5,15 +5,15 @@ package bytes_test
 import (
 	"testing"
 
-	. "github.com/evenlab/go-kit/bytes"
+	"github.com/evenlab/go-kit/bytes"
 )
 
 func Benchmark_Hamming(b *testing.B) {
-	vx := RandBytes(256)
-	vy := RandBytes(256)
+	vx := bytes.RandBytes(256)
+	vy := bytes.RandBytes(256)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		if _, err := Hamming(vx, vy); err != nil {
+		if _, err := bytes.Hamming(vx, vy); err != nil {
 			b.Fatal(err)
 		}
 	}
@@ -80,7 +80,7 @@ func Test_Hamming(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := Hamming(test.vx, test.vy)
+			got, err := bytes.Hamming(test.vx, test.vy)
 			if (err != nil) != test.wantErr {
 				t.Errorf("Hamming() error: %v | want: %v", err, test.wantErr)
 				return
@@ -114,8 +114,8 @@ func Test_SymmetryAxiom(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			distXY, _ := Hamming(test.vx, test.vy)
-			distYX, _ := Hamming(test.vy, test.vx)
+			distXY, _ := bytes.Hamming(test.vx, test.vy)
+			distYX, _ := bytes.Hamming(test.vy, test.vx)
 			if !(distXY == distYX) {
 				t.Errorf("Hamming() does not correspond to the symmetry axiom")
 			}
@@ -147,9 +147,9 @@ func Test_TriangularAxiom(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			distXY, _ := Hamming(test.vx, test.vy)
-			distXZ, _ := Hamming(test.vx, test.vz)
-			distYZ, _ := Hamming(test.vy, test.vz)
+			distXY, _ := bytes.Hamming(test.vx, test.vy)
+			distXZ, _ := bytes.Hamming(test.vx, test.vz)
+			distYZ, _ := bytes.Hamming(test.vy, test.vz)
 			if !(distXY+distYZ >= distXZ) {
 				t.Errorf("Hamming() does not correspond to the triangular axiom")
 			}
