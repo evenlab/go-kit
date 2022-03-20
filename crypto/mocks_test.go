@@ -6,12 +6,13 @@ import (
 	cc "github.com/libp2p/go-libp2p-core/crypto"
 
 	"github.com/evenlab/go-kit/bytes"
-	. "github.com/evenlab/go-kit/crypto"
+
+	"github.com/evenlab/go-kit/crypto"
 )
 
-func mockCryptoKeyPair(algo Algo) (cc.PrivKey, cc.PubKey) {
+func mockCryptoKeyPair(algo crypto.Algo) (cc.PrivKey, cc.PubKey) {
 	bits := -1
-	if algo == RSA {
+	if algo == crypto.RSA {
 		bits = 2048
 	}
 
@@ -23,8 +24,8 @@ func mockCryptoKeyPair(algo Algo) (cc.PrivKey, cc.PubKey) {
 	return prKey, pbKey
 }
 
-func mockGenerateKeyPair(algo Algo) (PrivateKey, PublicKey) {
-	prKey, pbKey, err := GenerateKeyPair(algo)
+func mockGenerateKeyPair(algo crypto.Algo) (crypto.PrivateKey, crypto.PublicKey) {
+	prKey, pbKey, err := crypto.GenerateKeyPair(algo)
 	if err != nil {
 		panic(err)
 	}
@@ -32,9 +33,9 @@ func mockGenerateKeyPair(algo Algo) (PrivateKey, PublicKey) {
 	return prKey, pbKey
 }
 
-func mockSignable(algo Algo, size int) (*SignableStub, PrivateKey) {
+func mockSignable(algo crypto.Algo, size int) (*crypto.SignableStub, crypto.PrivateKey) {
 	prKi, pbKi := mockCryptoKeyPair(algo)
-	signable := SignableStub{Blob: bytes.RandBytes(size)}
+	signable := crypto.SignableStub{Blob: bytes.RandBytes(size)}
 
 	h256, err := signable.Hash()
 	if err != nil {
@@ -46,13 +47,13 @@ func mockSignable(algo Algo, size int) (*SignableStub, PrivateKey) {
 		panic(err)
 	}
 
-	signable.Sign = NewSignature(sign)
-	signable.PbKey = NewPublicKey(pbKi)
+	signable.Sign = crypto.NewSignature(sign)
+	signable.PbKey = crypto.NewPublicKey(pbKi)
 
-	return &signable, NewPrivateKey(prKi)
+	return &signable, crypto.NewPrivateKey(prKi)
 }
 
-func mockSignature(algo Algo) (Signature, PrivateKey) {
+func mockSignature(algo crypto.Algo) (crypto.Signature, crypto.PrivateKey) {
 	signable, prKey := mockSignable(algo, 1024)
 
 	return signable.Sign, prKey

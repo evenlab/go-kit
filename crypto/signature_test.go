@@ -10,8 +10,9 @@ import (
 	json "github.com/json-iterator/go"
 	"google.golang.org/protobuf/proto"
 
-	. "github.com/evenlab/go-kit/crypto"
 	"github.com/evenlab/go-kit/crypto/proto/pb"
+
+	. "github.com/evenlab/go-kit/crypto"
 )
 
 func Benchmark_NewSignature(b *testing.B) {

@@ -10,12 +10,13 @@ import (
 
 	"github.com/evenlab/go-kit/base58"
 	"github.com/evenlab/go-kit/bytes"
-	. "github.com/evenlab/go-kit/crypto"
 	"github.com/evenlab/go-kit/strings"
+
+	"github.com/evenlab/go-kit/crypto"
 )
 
 var (
-	h224 = NewHash224(
+	h224 = crypto.NewHash224(
 		bytes.RandBytes(128),
 		bytes.RandBytes(256),
 		bytes.RandBytes(512),
@@ -28,17 +29,18 @@ func Benchmark_NewHash224(b *testing.B) {
 	b3 := bytes.RandBytes(512)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = NewHash224(b1, b2, b3)
+		_ = crypto.NewHash224(b1, b2, b3)
 	}
 }
 
 func Benchmark_StrToHash224(b *testing.B) {
-	s1 := strings.RandString(16)
-	s2 := strings.RandString(32)
-	s3 := strings.RandString(64)
+	r := strings.NewRand()
+	s1 := r.Rand(strings.RandSize(16))
+	s2 := r.Rand(strings.RandSize(32))
+	s3 := r.Rand(strings.RandSize(64))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = StrToHash224(s1, s2, s3)
+		_ = crypto.StrToHash224(s1, s2, s3)
 	}
 }
 
@@ -50,7 +52,7 @@ func Benchmark_Hash224_Base58(b *testing.B) {
 
 func Benchmark_Hash224_Empty(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = Hash224{}.Empty()
+		_ = crypto.Hash224{}.Empty()
 	}
 }
 
@@ -61,7 +63,7 @@ func Benchmark_Hash224_Encode(b *testing.B) {
 }
 
 func Benchmark_Hash224_Hamming(b *testing.B) {
-	v224 := [Hash224Size]byte{}
+	v224 := [crypto.Hash224Size]byte{}
 	copy(v224[:], bytes.RandBytes(160))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -94,7 +96,7 @@ func Test_NewHash224(t *testing.T) {
 	tests := [1]struct {
 		name string
 		args [][]byte
-		want Hash224
+		want crypto.Hash224
 	}{
 		{
 			name: "OK",
@@ -108,7 +110,7 @@ func Test_NewHash224(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := NewHash224(test.args...); !reflect.DeepEqual(got, test.want) {
+			if got := crypto.NewHash224(test.args...); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("NewHash224() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -118,10 +120,11 @@ func Test_NewHash224(t *testing.T) {
 func Test_StrToHash224(t *testing.T) {
 	t.Parallel()
 
+	r := strings.NewRand()
 	args := []string{
-		strings.RandString(16),
-		strings.RandString(32),
-		strings.RandString(64),
+		r.Rand(strings.RandSize(16)),
+		r.Rand(strings.RandSize(32)),
+		r.Rand(strings.RandSize(64)),
 	}
 
 	str := ""
@@ -134,7 +137,7 @@ func Test_StrToHash224(t *testing.T) {
 	tests := [1]struct {
 		name string
 		args []string
-		want Hash224
+		want crypto.Hash224
 	}{
 		{
 			name: "OK",
@@ -148,7 +151,7 @@ func Test_StrToHash224(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := StrToHash224(test.args...); !reflect.DeepEqual(got, test.want) {
+			if got := crypto.StrToHash224(test.args...); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("StrToHash224() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -160,7 +163,7 @@ func Test_Hash224_Base58(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		h224 Hash224
+		h224 crypto.Hash224
 		want string
 	}{
 		{
@@ -187,7 +190,7 @@ func Test_Hash224_Encode(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		h224 Hash224
+		h224 crypto.Hash224
 		want string
 	}{
 		{
@@ -214,12 +217,12 @@ func Test_Hash224_Empty(t *testing.T) {
 
 	tests := [2]struct {
 		name string
-		h224 Hash224
+		h224 crypto.Hash224
 		want bool
 	}{
 		{
 			name: "TRUE",
-			h224: Hash224{},
+			h224: crypto.Hash224{},
 			want: true,
 		},
 		{
@@ -246,14 +249,14 @@ func Test_Hash224_Hamming(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		h224 Hash224
-		v160 [Hash224Size]byte
+		h224 crypto.Hash224
+		v160 [crypto.Hash224Size]byte
 		want int
 	}{
 		{
 			name: "OK",
-			h224: Hash224{1},
-			v160: [Hash224Size]byte{15},
+			h224: crypto.Hash224{1},
+			v160: [crypto.Hash224Size]byte{15},
 			want: 3,
 		},
 	}
@@ -275,7 +278,7 @@ func Test_Hash224_String(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		h224 Hash224
+		h224 crypto.Hash224
 		want string
 	}{
 		{

@@ -10,12 +10,13 @@ import (
 
 	"github.com/evenlab/go-kit/base58"
 	"github.com/evenlab/go-kit/bytes"
-	. "github.com/evenlab/go-kit/crypto"
 	"github.com/evenlab/go-kit/strings"
+
+	"github.com/evenlab/go-kit/crypto"
 )
 
 var (
-	h256 = NewHash256(
+	h256 = crypto.NewHash256(
 		bytes.RandBytes(128),
 		bytes.RandBytes(256),
 		bytes.RandBytes(512),
@@ -28,17 +29,18 @@ func Benchmark_NewHash256(b *testing.B) {
 	b3 := bytes.RandBytes(512)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = NewHash256(b1, b2, b3)
+		_ = crypto.NewHash256(b1, b2, b3)
 	}
 }
 
 func Benchmark_StrToHash256(b *testing.B) {
-	s1 := strings.RandString(16)
-	s2 := strings.RandString(32)
-	s3 := strings.RandString(64)
+	r := strings.NewRand()
+	s1 := r.Rand(strings.RandSize(16))
+	s2 := r.Rand(strings.RandSize(32))
+	s3 := r.Rand(strings.RandSize(64))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = StrToHash256(s1, s2, s3)
+		_ = crypto.StrToHash256(s1, s2, s3)
 	}
 }
 
@@ -50,7 +52,7 @@ func Benchmark_Hash256_Base58(b *testing.B) {
 
 func Benchmark_Hash256_Empty(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = Hash256{}.Empty()
+		_ = crypto.Hash256{}.Empty()
 	}
 }
 
@@ -61,7 +63,7 @@ func Benchmark_Hash256_Encode(b *testing.B) {
 }
 
 func Benchmark_Hash256_Hamming(b *testing.B) {
-	v256 := [Hash256Size]byte{}
+	v256 := [crypto.Hash256Size]byte{}
 	copy(v256[:], bytes.RandBytes(256))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -88,13 +90,13 @@ func Test_NewHash256(t *testing.T) {
 	for _, b := range args {
 		blob = append(blob, b...)
 	}
-	h256, b256 := Hash256{}, sha256.Sum256(blob)
+	h256, b256 := crypto.Hash256{}, sha256.Sum256(blob)
 	copy(h256[:], b256[:])
 
 	tests := [1]struct {
 		name string
 		args [][]byte
-		want Hash256
+		want crypto.Hash256
 	}{
 		{
 			name: "Test_NewHash256_OK",
@@ -108,7 +110,7 @@ func Test_NewHash256(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := NewHash256(test.args...); !reflect.DeepEqual(got, test.want) {
+			if got := crypto.NewHash256(test.args...); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("crypto.NewHash256() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -118,10 +120,11 @@ func Test_NewHash256(t *testing.T) {
 func Test_StrToHash256(t *testing.T) {
 	t.Parallel()
 
+	r := strings.NewRand()
 	args := []string{
-		strings.RandString(16),
-		strings.RandString(32),
-		strings.RandString(64),
+		r.Rand(strings.RandSize(16)),
+		r.Rand(strings.RandSize(32)),
+		r.Rand(strings.RandSize(64)),
 	}
 
 	str := ""
@@ -129,13 +132,13 @@ func Test_StrToHash256(t *testing.T) {
 		str += s
 	}
 	blob := []byte(str)
-	h256, b256 := Hash256{}, sha256.Sum256(blob)
+	h256, b256 := crypto.Hash256{}, sha256.Sum256(blob)
 	copy(h256[:], b256[:])
 
 	tests := [1]struct {
 		name string
 		args []string
-		want Hash256
+		want crypto.Hash256
 	}{
 		{
 			name: "Test_StrToHash256_OK",
@@ -149,7 +152,7 @@ func Test_StrToHash256(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := StrToHash256(test.args...); !reflect.DeepEqual(got, test.want) {
+			if got := crypto.StrToHash256(test.args...); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("StrToHash256() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -161,7 +164,7 @@ func Test_Hash256_Base58(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		h256 Hash256
+		h256 crypto.Hash256
 		want string
 	}{
 		{
@@ -188,12 +191,12 @@ func Test_Hash256_Empty(t *testing.T) {
 
 	tests := [2]struct {
 		name string
-		h256 Hash256
+		h256 crypto.Hash256
 		want bool
 	}{
 		{
 			name: "TRUE",
-			h256: Hash256{},
+			h256: crypto.Hash256{},
 			want: true,
 		},
 		{
@@ -220,7 +223,7 @@ func Test_Hash256_Encode(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		h256 Hash256
+		h256 crypto.Hash256
 		want string
 	}{
 		{
@@ -247,14 +250,14 @@ func Test_Hash256_Hamming(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		h256 Hash256
-		v256 [Hash256Size]byte
+		h256 crypto.Hash256
+		v256 [crypto.Hash256Size]byte
 		want int
 	}{
 		{
 			name: "Test_Hash256_Hamming_OK",
-			h256: Hash256{1},
-			v256: [Hash256Size]byte{15},
+			h256: crypto.Hash256{1},
+			v256: [crypto.Hash256Size]byte{15},
 			want: 3,
 		},
 	}
@@ -276,7 +279,7 @@ func Test_Hash256_String(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		h256 Hash256
+		h256 crypto.Hash256
 		want string
 	}{
 		{
