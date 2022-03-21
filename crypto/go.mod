@@ -3,11 +3,11 @@ module github.com/evenlab/go-kit/crypto
 go 1.17
 
 require (
-	github.com/evenlab/go-kit/base58 v0.0.0-20220320201839-336d095e4a08
-	github.com/evenlab/go-kit/bytes v0.0.0-20220320201839-336d095e4a08
-	github.com/evenlab/go-kit/equal v0.0.0-20220320201839-336d095e4a08
-	github.com/evenlab/go-kit/errors v0.0.0-20220320201839-336d095e4a08
-	github.com/evenlab/go-kit/strings v0.0.0-20220320201839-336d095e4a08
+	github.com/evenlab/go-kit/base58 v0.0.0-20220321103424-135ba74d3a4f
+	github.com/evenlab/go-kit/bytes v0.0.0-20220321103424-135ba74d3a4f
+	github.com/evenlab/go-kit/equal v0.0.0-20220321103424-135ba74d3a4f
+	github.com/evenlab/go-kit/errors v0.0.0-20220321103424-135ba74d3a4f
+	github.com/evenlab/go-kit/strings v0.0.0-20220321103424-135ba74d3a4f
 	github.com/json-iterator/go v1.1.12
 	github.com/libp2p/go-libp2p-core v0.14.0
 	google.golang.org/protobuf v1.27.1

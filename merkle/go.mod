@@ -3,15 +3,15 @@ module github.com/evenlab/go-kit/merkle
 go 1.17
 
 require (
-	github.com/evenlab/go-kit/bytes v0.0.0-20220320201839-336d095e4a08
-	github.com/evenlab/go-kit/crypto v0.0.0-20220320201839-336d095e4a08
-	github.com/evenlab/go-kit/errors v0.0.0-20220320201839-336d095e4a08
+	github.com/evenlab/go-kit/bytes v0.0.0-20220321103424-135ba74d3a4f
+	github.com/evenlab/go-kit/crypto v0.0.0-20220321103424-135ba74d3a4f
+	github.com/evenlab/go-kit/errors v0.0.0-20220321103424-135ba74d3a4f
 )
 
 require (
 	github.com/btcsuite/btcd v0.20.1-beta // indirect
-	github.com/evenlab/go-kit/base58 v0.0.0-20220320195001-da35e126ef29 // indirect
-	github.com/evenlab/go-kit/equal v0.0.0-20220320195001-da35e126ef29 // indirect
+	github.com/evenlab/go-kit/base58 v0.0.0-20220320201839-336d095e4a08 // indirect
+	github.com/evenlab/go-kit/equal v0.0.0-20220320201839-336d095e4a08 // indirect
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/libp2p/go-libp2p-core v0.14.0 // indirect
