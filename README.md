@@ -11,12 +11,17 @@
 > For latest setup info see [Chocolatey CLI Documentation](https://docs.chocolatey.org/en-us/choco/setup)
 
 ### Requirements:
+
 * Windows 7+ / Windows Server 2003+
-* PowerShell v2+ (Not PowerShell Core yet though)(minimum is v3 for install from this website due to TLS 1.2 requirement)
-* .NET Framework 4+ (the installation will attempt to install .NET 4.0 if you do not have it installed)(minimum is 4.5 for install from this website due to TLS 1.2 requirement)
+* PowerShell v2+ (Not PowerShell Core yet though)(minimum is v3 for install from this website due to TLS 1.2
+  requirement)
+* .NET Framework 4+ (the installation will attempt to install .NET 4.0 if you do not have it installed)(minimum is 4.5
+  for install from this website due to TLS 1.2 requirement)
+
 > That's it! All you need is choco.exe (that you get from the installation scripts) and you are good to go! No Visual Studio required.
 
 ### Installing Chocolatey
+
 Chocolatey installs in seconds. You are just a few steps from running choco right now!
 
 * Ensure that you are using an administrative shell.
@@ -43,4 +48,5 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 ```shell
 choco install make
 ```
+
 ### Now you will be able to use `make` on Windows.

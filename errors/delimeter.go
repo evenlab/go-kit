@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package errors
 
@@ -14,16 +14,16 @@ var (
 
 // GetDelimiter returns current use delimiter chars for wrap errors.
 func GetDelimiter() string {
-	rwDelimMutex.Lock()
+	rwDelimMutex.RLock()
 	delim := delimiter
-	rwDelimMutex.Unlock()
+	rwDelimMutex.RUnlock()
 
 	return delim
 }
 
 // SetDelimiter sets new delimiter chars to use for wrap errors.
 func SetDelimiter(s string) {
-	rwDelimMutex.RLock()
+	rwDelimMutex.Lock()
 	delimiter = s
-	rwDelimMutex.RUnlock()
+	rwDelimMutex.Unlock()
 }

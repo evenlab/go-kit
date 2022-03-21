@@ -1,11 +1,11 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package base58_test
 
 import (
 	"strings"
 
-	. "github.com/evenlab/go-kit/base58"
+	"github.com/evenlab/go-kit/base58"
 )
 
 type (
@@ -114,10 +114,10 @@ func mockTestCaseDecode() [11]testMock {
 }
 
 func mockTestCaseDecodeErr() []testMock {
-	cases := make([]testMock, 0, 256-len(Alphabet))
+	cases := make([]testMock, 0, 256-len(base58.Alphabet))
 	for i := 0; i < 256; i++ {
 		s := string(rune(i))
-		if strings.Contains(Alphabet, s) {
+		if strings.Contains(base58.Alphabet, s) {
 			continue
 		}
 		cases = append(cases, testMock{base: s})

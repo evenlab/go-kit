@@ -3,17 +3,61 @@ pre-push: go-mod check-commit
 
 go-mod:
 	@echo "mod tidy start..."
-	@go mod tidy -v
-	@go mod download -x
+	@cd ./base58 && go mod tidy
+	@cd ./base58 && go mod download
+	@cd ./bytes && go mod tidy
+	@cd ./bytes && go mod download
+	@cd ./context && go mod tidy
+	@cd ./context && go mod download
+	@cd ./crypto && go mod tidy
+	@cd ./crypto && go mod download
+	@cd ./drive && go mod tidy
+	@cd ./drive && go mod download
+	@cd ./equal && go mod tidy
+	@cd ./equal && go mod download
+	@cd ./errors && go mod tidy
+	@cd ./errors && go mod download
+	@cd ./merkle && go mod tidy
+	@cd ./merkle && go mod download
+	@cd ./network && go mod tidy
+	@cd ./network && go mod download
+	@cd ./strings && go mod tidy
+	@cd ./strings && go mod download
+	@cd ./timestamp && go mod tidy
+	@cd ./timestamp && go mod download
+	@cd ./zero && go mod tidy
+	@cd ./zero && go mod download
 	@echo "mod tidy complete."
 
 check-commit:
 	@echo "testing start..."
 	@go clean -testcache
-	go test -v ./...
+	@cd ./base58 && go test -race ./...
+	@cd ./bytes && go test -race ./...
+	@cd ./context && go test -race ./...
+	@cd ./crypto && go test -race ./...
+	@cd ./drive && go test -race ./...
+	@cd ./equal && go test -race ./...
+	@cd ./errors && go test -race ./...
+	@cd ./merkle && go test -race ./...
+	@cd ./network && go test -race ./...
+	@cd ./strings && go test -race ./...
+	@cd ./timestamp && go test -race ./...
+	@cd ./zero && go test -race ./...
 	@echo "test complete."
 	@echo "linting start..."
-	golangci-lint run -v ./...
+	@cd ./base58 && golangci-lint run
+	@cd ./bytes && golangci-lint run
+	@cd ./context && golangci-lint run
+	@cd ./crypto && golangci-lint run
+	@cd ./drive && golangci-lint run
+	@cd ./equal && golangci-lint run
+	@cd ./errors && golangci-lint run
+	@cd ./merkle && golangci-lint run
+	@cd ./network && golangci-lint run
+	@cd ./strings && golangci-lint run
+	@cd ./timestamp && golangci-lint run
+	@cd ./zero && golangci-lint run
 	@echo "lint complete."
 
 .PHONY: protoc-upgrade protoc-update generate-proto go-generate-proto

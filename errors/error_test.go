@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package errors_test
 
@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	. "github.com/evenlab/go-kit/errors"
+	errKIT "github.com/evenlab/go-kit/errors"
 )
 
 const (
@@ -21,53 +21,53 @@ var (
 )
 
 func Benchmark_As(b *testing.B) {
-	testErr := New(testErrorMsg)
-	wrapErr := WrapErr(wrapErrorMsg, testErr)
+	testErr := errKIT.New(testErrorMsg)
+	wrapErr := errKIT.WrapErr(wrapErrorMsg, testErr)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = As(wrapErr, &testErr)
+		_ = errKIT.As(wrapErr, &testErr)
 	}
 }
 
 func Benchmark_Is(b *testing.B) {
-	testErr := New(testErrorMsg)
-	wrapErr := WrapErr(wrapErrorMsg, testErr)
+	testErr := errKIT.New(testErrorMsg)
+	wrapErr := errKIT.WrapErr(wrapErrorMsg, testErr)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = Is(wrapErr, testErr)
+		_ = errKIT.Is(wrapErr, testErr)
 	}
 }
 
 func Benchmark_New(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = New(testErrorMsg)
+		_ = errKIT.New(testErrorMsg)
 	}
 }
 
 func Benchmark_Unwrap(b *testing.B) {
-	wrapErr := WrapErr(wrapErrorMsg, New(testErrorMsg))
+	wrapErr := errKIT.WrapErr(wrapErrorMsg, errKIT.New(testErrorMsg))
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = Unwrap(wrapErr)
+		_ = errKIT.Unwrap(wrapErr)
 	}
 }
 
 func Benchmark_WrapErr(b *testing.B) {
-	wrapErr := New(wrapErrorMsg)
+	wrapErr := errKIT.New(wrapErrorMsg)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = WrapErr(testErrorMsg, wrapErr)
+		_ = errKIT.WrapErr(testErrorMsg, wrapErr)
 	}
 }
 
 func Benchmark_WrapStr(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = WrapStr(testErrorMsg, wrapErrorMsg)
+		_ = errKIT.WrapStr(testErrorMsg, wrapErrorMsg)
 	}
 }
 
 func Benchmark_FmtErrorf_Wrap(b *testing.B) {
-	wrapErr := New(wrapErrorMsg)
+	wrapErr := errKIT.New(wrapErrorMsg)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = fmt.Errorf(wrapFmtLibFormat, testErrorMsg, wrapErr) //nolint:forbidigo
@@ -77,8 +77,8 @@ func Benchmark_FmtErrorf_Wrap(b *testing.B) {
 func Test_As(t *testing.T) {
 	t.Parallel()
 
-	testErr := New(testErrorMsg)
-	wrapErr := WrapErr(wrapErrorMsg, testErr)
+	testErr := errKIT.New(testErrorMsg)
+	wrapErr := errKIT.WrapErr(wrapErrorMsg, testErr)
 
 	tests := [1]struct {
 		name    string
@@ -99,7 +99,7 @@ func Test_As(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := As(test.wrapErr, &test.testErr); got != test.want {
+			if got := errKIT.As(test.wrapErr, &test.testErr); got != test.want {
 				t.Errorf("As() got: %v | want: %v", got, test.want)
 				return
 			}
@@ -116,8 +116,8 @@ func Test_As(t *testing.T) {
 func Test_Is(t *testing.T) {
 	t.Parallel()
 
-	testErr := New(testErrorMsg)
-	wrapErr := WrapErr(wrapErrorMsg, testErr)
+	testErr := errKIT.New(testErrorMsg)
+	wrapErr := errKIT.WrapErr(wrapErrorMsg, testErr)
 
 	tests := [2]struct {
 		name    string
@@ -134,7 +134,7 @@ func Test_Is(t *testing.T) {
 		{
 			name:    "FALSE",
 			testErr: testErr,
-			wrapErr: WrapErr(wrapErrorMsg, New(testErrorMsg)),
+			wrapErr: errKIT.WrapErr(wrapErrorMsg, errKIT.New(testErrorMsg)),
 		},
 	}
 
@@ -143,7 +143,7 @@ func Test_Is(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := Is(test.wrapErr, test.testErr); got != test.want {
+			if got := errKIT.Is(test.wrapErr, test.testErr); got != test.want {
 				t.Errorf("Is() got: %v | want: %v", got, test.want)
 			}
 		})
@@ -170,7 +170,7 @@ func Test_New(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := New(test.text).Error(); got != test.want {
+			if got := errKIT.New(test.text).Error(); got != test.want {
 				t.Errorf("New() got: %v | want: %v", got, test.want)
 			}
 		})
@@ -180,8 +180,8 @@ func Test_New(t *testing.T) {
 func Test_Unwrap(t *testing.T) {
 	t.Parallel()
 
-	testErr := New(testErrorMsg)
-	wrapErr := WrapErr(wrapErrorMsg, testErr)
+	testErr := errKIT.New(testErrorMsg)
+	wrapErr := errKIT.WrapErr(wrapErrorMsg, testErr)
 
 	tests := [4]struct {
 		name string
@@ -205,7 +205,7 @@ func Test_Unwrap(t *testing.T) {
 		},
 		{
 			name: "double_wrap_OK",
-			err:  WrapErr(wrapErrorMsg, wrapErr),
+			err:  errKIT.WrapErr(wrapErrorMsg, wrapErr),
 			want: wrapErr,
 		},
 	}
@@ -215,7 +215,7 @@ func Test_Unwrap(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := Unwrap(test.err); !reflect.DeepEqual(got, test.want) {
+			if got := errKIT.Unwrap(test.err); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("Unwrap() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -244,7 +244,7 @@ func Test_WrapErr(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := WrapErr(test.text, test.wrap).Error(); got != test.want {
+			if got := errKIT.WrapErr(test.text, test.wrap).Error(); got != test.want {
 				t.Errorf("WrapErr() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -273,7 +273,7 @@ func Test_WrapStr(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := WrapStr(test.text, test.wrap).Error(); got != test.want {
+			if got := errKIT.WrapStr(test.text, test.wrap).Error(); got != test.want {
 				t.Errorf("WrapStr() got: %#v | want: %#v", got, test.want)
 			}
 		})

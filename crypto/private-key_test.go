@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package crypto_test
 
@@ -8,19 +8,19 @@ import (
 
 	cc "github.com/libp2p/go-libp2p-core/crypto"
 
-	. "github.com/evenlab/go-kit/crypto"
+	"github.com/evenlab/go-kit/crypto"
 )
 
 func Benchmark_NewPrivateKey(b *testing.B) {
-	ki, _ := mockCryptoKeyPair(Ed25519)
+	ki, _ := mockCryptoKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = NewPrivateKey(ki)
+		_ = crypto.NewPrivateKey(ki)
 	}
 }
 
 func Benchmark_privateKey_Algo(b *testing.B) {
-	prKey, _ := mockGenerateKeyPair(Ed25519)
+	prKey, _ := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = prKey.Algo()
@@ -28,7 +28,7 @@ func Benchmark_privateKey_Algo(b *testing.B) {
 }
 
 func Benchmark_privateKey_PublicKey(b *testing.B) {
-	prKey, _ := mockGenerateKeyPair(Ed25519)
+	prKey, _ := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = prKey.PublicKey()
@@ -36,7 +36,7 @@ func Benchmark_privateKey_PublicKey(b *testing.B) {
 }
 
 func Benchmark_privateKey_Sign(b *testing.B) {
-	signable, prKey := mockSignable(Ed25519, 1024)
+	signable, prKey := mockSignable(crypto.Ed25519, 1024)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := prKey.Sign(signable); err != nil {
@@ -52,26 +52,26 @@ func Test_NewPrivateKey(t *testing.T) {
 		testCase struct {
 			name string
 			ki   cc.PrivKey
-			want PrivateKey
+			want crypto.PrivateKey
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		ki, _ := mockCryptoKeyPair(algo)
 		tests = append(tests, testCase{
 			name: name + "_OK",
 			ki:   ki,
-			want: NewPrivateKey(ki),
+			want: crypto.NewPrivateKey(ki),
 		})
 	}
 
 	tests = append(tests, testCase{
 		name: "nil_OK",
 		ki:   nil,
-		want: NewPrivateKey(nil),
+		want: crypto.NewPrivateKey(nil),
 	})
 
 	for idx := range tests {
@@ -79,7 +79,7 @@ func Test_NewPrivateKey(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := NewPrivateKey(test.ki); !reflect.DeepEqual(got, test.want) {
+			if got := crypto.NewPrivateKey(test.ki); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("NewPrivateKey() got: %v | want: %v", got, test.want)
 			}
 		})
@@ -92,13 +92,13 @@ func Test_privateKey_Algo(t *testing.T) {
 	type (
 		testCase struct {
 			name  string
-			prKey PrivateKey
-			want  Algo
+			prKey crypto.PrivateKey
+			want  crypto.Algo
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		prKey, _ := mockGenerateKeyPair(algo)
@@ -111,8 +111,8 @@ func Test_privateKey_Algo(t *testing.T) {
 
 	tests = append(tests, testCase{
 		name:  "UNKNOWN_OK",
-		prKey: NewPrivateKey(nil),
-		want:  UNKNOWN,
+		prKey: crypto.NewPrivateKey(nil),
+		want:  crypto.UNKNOWN,
 	})
 
 	for idx := range tests {
@@ -133,14 +133,14 @@ func Test_privateKey_PublicKey(t *testing.T) {
 	type (
 		testCase struct {
 			name   string
-			prKey  PrivateKey
-			want   PublicKey
+			prKey  crypto.PrivateKey
+			want   crypto.PublicKey
 			wantEq bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()*2)
 	for name, algo := range algos {
 		notEq, _ := mockGenerateKeyPair(algo)
@@ -175,15 +175,15 @@ func Test_privateKey_Sign(t *testing.T) {
 	type (
 		testCase struct {
 			name       string
-			prKey      PrivateKey
-			signable   Signable
+			prKey      crypto.PrivateKey
+			signable   crypto.Signable
 			wantErr    bool
 			wantVerify bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+2)
 	for name, algo := range algos {
 		signable, prKey := mockSignable(algo, 1024)
@@ -195,7 +195,7 @@ func Test_privateKey_Sign(t *testing.T) {
 		})
 	}
 
-	signable, prKey := mockSignable(Ed25519, 1024)
+	signable, prKey := mockSignable(crypto.Ed25519, 1024)
 	tests = append(tests, testCase{
 		name:     "nil_Signable_ERR",
 		prKey:    prKey,
@@ -203,13 +203,13 @@ func Test_privateKey_Sign(t *testing.T) {
 		wantErr:  true,
 	}, testCase{
 		name:     "nil_pointer_PrivateKey_ERR",
-		prKey:    NewPrivateKey(nil),
+		prKey:    crypto.NewPrivateKey(nil),
 		signable: signable,
 		wantErr:  true,
 	}, testCase{
 		name:     "nil_pointer_Signable_ERR",
 		prKey:    prKey,
-		signable: NewSignable(nil),
+		signable: crypto.NewSignable(nil),
 		wantErr:  true,
 	})
 

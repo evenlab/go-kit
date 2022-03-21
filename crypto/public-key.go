@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package crypto
 
@@ -6,13 +6,13 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 
+	"github.com/evenlab/go-kit/equal"
+	"github.com/evenlab/go-kit/errors"
 	json "github.com/json-iterator/go"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/evenlab/go-kit/crypto/proto/pb"
-	"github.com/evenlab/go-kit/equal"
-	"github.com/evenlab/go-kit/errors"
 )
 
 type (

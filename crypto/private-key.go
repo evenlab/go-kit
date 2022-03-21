@@ -1,11 +1,10 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package crypto
 
 import (
-	cc "github.com/libp2p/go-libp2p-core/crypto"
-
 	"github.com/evenlab/go-kit/errors"
+	cc "github.com/libp2p/go-libp2p-core/crypto"
 )
 
 type (

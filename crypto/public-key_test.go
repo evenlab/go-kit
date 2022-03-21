@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package crypto_test
 
@@ -13,32 +13,32 @@ import (
 	cc "github.com/libp2p/go-libp2p-core/crypto"
 	"google.golang.org/protobuf/proto"
 
-	. "github.com/evenlab/go-kit/crypto"
+	"github.com/evenlab/go-kit/crypto"
 	"github.com/evenlab/go-kit/crypto/proto/pb"
 )
 
 func Benchmark_NewPublicKey(b *testing.B) {
-	_, ki := mockCryptoKeyPair(Ed25519)
+	_, ki := mockCryptoKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = NewPublicKey(ki)
+		_ = crypto.NewPublicKey(ki)
 	}
 }
 
 func Benchmark_DecodePublicKey(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	pbuf, err := pbKey.Encode()
 	if err != nil {
 		b.Fatal(err)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = DecodePublicKey(pbuf)
+		_, _ = crypto.DecodePublicKey(pbuf)
 	}
 }
 
 func Benchmark_publicKey_Algo(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = pbKey.Algo()
@@ -46,7 +46,7 @@ func Benchmark_publicKey_Algo(b *testing.B) {
 }
 
 func Benchmark_publicKey_Base64(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Base64(); err != nil {
@@ -56,14 +56,14 @@ func Benchmark_publicKey_Base64(b *testing.B) {
 }
 
 func Benchmark_publicKey_Decode(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	pbuf, err := pbKey.Encode()
 	if err != nil {
 		b.Fatal(err)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		pbKey = NewPublicKey(nil)
+		pbKey = crypto.NewPublicKey(nil)
 		if err := pbKey.Decode(pbuf); err != nil {
 			b.Fatal(err)
 		}
@@ -71,7 +71,7 @@ func Benchmark_publicKey_Decode(b *testing.B) {
 }
 
 func Benchmark_publicKey_Encode(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Encode(); err != nil {
@@ -81,7 +81,7 @@ func Benchmark_publicKey_Encode(b *testing.B) {
 }
 
 func Benchmark_publicKey_Equals(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = pbKey.Equals(pbKey)
@@ -89,7 +89,7 @@ func Benchmark_publicKey_Equals(b *testing.B) {
 }
 
 func Benchmark_publicKey_Hash224(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Hash224(); err != nil {
@@ -99,7 +99,7 @@ func Benchmark_publicKey_Hash224(b *testing.B) {
 }
 
 func Benchmark_publicKey_Marshal(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Marshal(); err != nil {
@@ -109,7 +109,7 @@ func Benchmark_publicKey_Marshal(b *testing.B) {
 }
 
 func Benchmark_publicKey_MarshalJSON(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.MarshalJSON(); err != nil {
@@ -119,7 +119,7 @@ func Benchmark_publicKey_MarshalJSON(b *testing.B) {
 }
 
 func Benchmark_publicKey_Raw(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := pbKey.Raw(); err != nil {
@@ -129,7 +129,7 @@ func Benchmark_publicKey_Raw(b *testing.B) {
 }
 
 func Benchmark_publicKey_String(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = pbKey.String()
@@ -137,7 +137,7 @@ func Benchmark_publicKey_String(b *testing.B) {
 }
 
 func Benchmark_publicKey_Unmarshal(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	blob, err := pbKey.Marshal()
 	if err != nil {
 		b.Fatal(err)
@@ -151,7 +151,7 @@ func Benchmark_publicKey_Unmarshal(b *testing.B) {
 }
 
 func Benchmark_publicKey_UnmarshalJSON(b *testing.B) {
-	_, pbKey := mockGenerateKeyPair(Ed25519)
+	_, pbKey := mockGenerateKeyPair(crypto.Ed25519)
 	blob, err := pbKey.MarshalJSON()
 	if err != nil {
 		b.Fatal(err)
@@ -165,7 +165,7 @@ func Benchmark_publicKey_UnmarshalJSON(b *testing.B) {
 }
 
 func Benchmark_publicKey_Verify(b *testing.B) {
-	signable, prKey := mockSignable(Ed25519, 1024)
+	signable, prKey := mockSignable(crypto.Ed25519, 1024)
 	pbKey := prKey.PublicKey()
 	if _, err := prKey.Sign(signable); err != nil {
 		b.Fatal(err)
@@ -185,26 +185,26 @@ func Test_NewPublicKey(t *testing.T) {
 		testCase struct {
 			name string
 			ki   cc.PubKey
-			want PublicKey
+			want crypto.PublicKey
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, ki := mockCryptoKeyPair(algo)
 		tests = append(tests, testCase{
 			name: name + "_OK",
 			ki:   ki,
-			want: NewPublicKey(ki),
+			want: crypto.NewPublicKey(ki),
 		})
 	}
 
 	tests = append(tests, testCase{
 		name: "nil_OK",
 		ki:   nil,
-		want: NewPublicKey(nil),
+		want: crypto.NewPublicKey(nil),
 	})
 
 	for idx := range tests {
@@ -212,7 +212,7 @@ func Test_NewPublicKey(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := NewPublicKey(test.ki); !reflect.DeepEqual(got, test.want) {
+			if got := crypto.NewPublicKey(test.ki); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("NewPrivateKey() got: %v | want: %v", got, test.want)
 			}
 		})
@@ -226,13 +226,13 @@ func Test_DecodePublicKey(t *testing.T) {
 		testCase struct {
 			name    string
 			pbuf    *pb.PublicKey
-			want    PublicKey
+			want    crypto.PublicKey
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()*2)
 	for name, algo := range algos {
 		_, ki := mockCryptoKeyPair(algo)
@@ -241,11 +241,11 @@ func Test_DecodePublicKey(t *testing.T) {
 		tests = append(tests, testCase{
 			name: name + "_OK",
 			pbuf: &pbuf,
-			want: NewPublicKey(ki),
+			want: crypto.NewPublicKey(ki),
 		}, testCase{
 			name:    name + "_ERR",
 			pbuf:    &pb.PublicKey{},
-			want:    NewPublicKey(nil),
+			want:    crypto.NewPublicKey(nil),
 			wantErr: true,
 		})
 	}
@@ -255,7 +255,7 @@ func Test_DecodePublicKey(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := DecodePublicKey(test.pbuf)
+			got, err := crypto.DecodePublicKey(test.pbuf)
 			if (err != nil) != test.wantErr {
 				t.Errorf("DecodePublicKey() error: %v | want: %v", err, test.wantErr)
 				return
@@ -273,13 +273,13 @@ func Test_publicKey_Algo(t *testing.T) {
 	type (
 		testCase struct {
 			name  string
-			pbKey PublicKey
-			want  Algo
+			pbKey crypto.PublicKey
+			want  crypto.Algo
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, pbKey := mockGenerateKeyPair(algo)
@@ -292,8 +292,8 @@ func Test_publicKey_Algo(t *testing.T) {
 
 	tests = append(tests, testCase{
 		name:  "UNKNOWN_OK",
-		pbKey: NewPublicKey(nil),
-		want:  UNKNOWN,
+		pbKey: crypto.NewPublicKey(nil),
+		want:  crypto.UNKNOWN,
 	})
 
 	for idx := range tests {
@@ -314,28 +314,28 @@ func Test_publicKey_Base64(t *testing.T) {
 	type (
 		testCase struct {
 			name    string
-			pbKey   PublicKey
+			pbKey   crypto.PublicKey
 			want    []byte
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, ki := mockCryptoKeyPair(algo)
 		blob, _ := ki.Raw()
 		tests = append(tests, testCase{
 			name:  name + "_OK",
-			pbKey: NewPublicKey(ki),
+			pbKey: crypto.NewPublicKey(ki),
 			want:  blob,
 		})
 	}
 
 	tests = append(tests, testCase{
 		name:    "ERR",
-		pbKey:   NewPublicKey(nil),
+		pbKey:   crypto.NewPublicKey(nil),
 		wantErr: true,
 	})
 
@@ -366,13 +366,13 @@ func Test_publicKey_Decode(t *testing.T) {
 		testCase struct {
 			name    string
 			pbuf    *pb.PublicKey
-			want    PublicKey
+			want    crypto.PublicKey
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()*2)
 	for name, algo := range algos {
 		_, ki := mockCryptoKeyPair(algo)
@@ -381,11 +381,11 @@ func Test_publicKey_Decode(t *testing.T) {
 		tests = append(tests, testCase{
 			name: name + "_OK",
 			pbuf: &pbuf,
-			want: NewPublicKey(ki),
+			want: crypto.NewPublicKey(ki),
 		}, testCase{
 			name:    name + "_ERR",
 			pbuf:    &pb.PublicKey{},
-			want:    NewPublicKey(nil),
+			want:    crypto.NewPublicKey(nil),
 			wantErr: true,
 		})
 	}
@@ -395,7 +395,7 @@ func Test_publicKey_Decode(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := NewPublicKey(nil)
+			got := crypto.NewPublicKey(nil)
 			if err := got.Decode(test.pbuf); (err != nil) != test.wantErr {
 				t.Errorf("Decode() error: %v | want: %v", err, test.wantErr)
 				return
@@ -413,14 +413,14 @@ func Test_publicKey_Encode(t *testing.T) {
 	type (
 		testCase struct {
 			name    string
-			pbKey   PublicKey
+			pbKey   crypto.PublicKey
 			want    *pb.PublicKey
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, ki := mockCryptoKeyPair(algo)
@@ -428,14 +428,14 @@ func Test_publicKey_Encode(t *testing.T) {
 		pbuf := pb.PublicKey{Blob: blob}
 		tests = append(tests, testCase{
 			name:  name + "_OK",
-			pbKey: NewPublicKey(ki),
+			pbKey: crypto.NewPublicKey(ki),
 			want:  &pbuf,
 		})
 	}
 
 	tests = append(tests, testCase{
 		name:    "ERR",
-		pbKey:   NewPublicKey(nil),
+		pbKey:   crypto.NewPublicKey(nil),
 		wantErr: true,
 	})
 
@@ -462,14 +462,14 @@ func Test_publicKey_Equals(t *testing.T) {
 	type (
 		testCase struct {
 			name  string
-			pbKey PublicKey
-			equal PublicKey
+			pbKey crypto.PublicKey
+			equal crypto.PublicKey
 			want  bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()*2)
 	for name, algo := range algos {
 		_, notEq := mockGenerateKeyPair(algo)
@@ -504,14 +504,14 @@ func Test_publicKey_Hash224(t *testing.T) {
 	type (
 		testCase struct {
 			name    string
-			pbKey   PublicKey
-			want    Hash224
+			pbKey   crypto.PublicKey
+			want    crypto.Hash224
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, ki := mockCryptoKeyPair(algo)
@@ -520,14 +520,14 @@ func Test_publicKey_Hash224(t *testing.T) {
 		h224 := sha256.Sum224(h256[:])
 		tests = append(tests, testCase{
 			name:  name + "_OK",
-			pbKey: NewPublicKey(ki),
+			pbKey: crypto.NewPublicKey(ki),
 			want:  h224,
 		})
 	}
 
 	tests = append(tests, testCase{
 		name:    "ERR",
-		pbKey:   NewPublicKey(nil),
+		pbKey:   crypto.NewPublicKey(nil),
 		wantErr: true,
 	})
 
@@ -554,14 +554,14 @@ func Test_publicKey_Marshal(t *testing.T) {
 	type (
 		testCase struct {
 			name    string
-			pbKey   PublicKey
+			pbKey   crypto.PublicKey
 			want    []byte
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, pbKey := mockGenerateKeyPair(algo)
@@ -576,7 +576,7 @@ func Test_publicKey_Marshal(t *testing.T) {
 
 	tests = append(tests, testCase{
 		name:    "ERR",
-		pbKey:   NewPublicKey(nil),
+		pbKey:   crypto.NewPublicKey(nil),
 		wantErr: true,
 	})
 
@@ -603,14 +603,14 @@ func Test_publicKey_MarshalJSON(t *testing.T) {
 	type (
 		testCase struct {
 			name    string
-			pbKey   PublicKey
+			pbKey   crypto.PublicKey
 			want    []byte
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, pbKey := mockGenerateKeyPair(algo)
@@ -625,7 +625,7 @@ func Test_publicKey_MarshalJSON(t *testing.T) {
 
 	tests = append(tests, testCase{
 		name:    "ERR",
-		pbKey:   NewPublicKey(nil),
+		pbKey:   crypto.NewPublicKey(nil),
 		wantErr: true,
 	})
 
@@ -652,28 +652,28 @@ func Test_publicKey_Raw(t *testing.T) {
 	type (
 		testCase struct {
 			name    string
-			pbKey   PublicKey
+			pbKey   crypto.PublicKey
 			want    []byte
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, ki := mockCryptoKeyPair(algo)
 		blob, _ := ki.Raw()
 		tests = append(tests, testCase{
 			name:  name + "_OK",
-			pbKey: NewPublicKey(ki),
+			pbKey: crypto.NewPublicKey(ki),
 			want:  blob,
 		})
 	}
 
 	tests = append(tests, testCase{
 		name:    "ERR",
-		pbKey:   NewPublicKey(nil),
+		pbKey:   crypto.NewPublicKey(nil),
 		wantErr: true,
 	})
 
@@ -700,27 +700,27 @@ func Test_publicKey_String(t *testing.T) {
 	type (
 		testCase struct {
 			name  string
-			pbKey PublicKey
+			pbKey crypto.PublicKey
 			want  string
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, ki := mockCryptoKeyPair(algo)
 		blob, _ := ki.Raw()
 		tests = append(tests, testCase{
 			name:  name + "_OK",
-			pbKey: NewPublicKey(ki),
+			pbKey: crypto.NewPublicKey(ki),
 			want:  hex.EncodeToString(blob),
 		})
 	}
 
 	tests = append(tests, testCase{
 		name:  "nil_OK",
-		pbKey: NewPublicKey(nil),
+		pbKey: crypto.NewPublicKey(nil),
 		want:  "<nil>",
 	})
 
@@ -743,13 +743,13 @@ func Test_publicKey_Unmarshal(t *testing.T) {
 		testCase struct {
 			name    string
 			blob    []byte
-			want    PublicKey
+			want    crypto.PublicKey
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, pbKey := mockGenerateKeyPair(algo)
@@ -772,7 +772,7 @@ func Test_publicKey_Unmarshal(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := NewPublicKey(nil)
+			got := crypto.NewPublicKey(nil)
 			if err := got.Unmarshal(test.blob); (err != nil) != test.wantErr {
 				t.Errorf("Unmarshal() error: %v | want: %v", err, test.wantErr)
 				return
@@ -791,13 +791,13 @@ func Test_publicKey_UnmarshalJSON(t *testing.T) {
 		testCase struct {
 			name    string
 			blob    []byte
-			want    PublicKey
+			want    crypto.PublicKey
 			wantErr bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()+1)
 	for name, algo := range algos {
 		_, pbKey := mockGenerateKeyPair(algo)
@@ -820,7 +820,7 @@ func Test_publicKey_UnmarshalJSON(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := NewPublicKey(nil)
+			got := crypto.NewPublicKey(nil)
 			if err := got.UnmarshalJSON(test.blob); (err != nil) != test.wantErr {
 				t.Errorf("UnmarshalJSON() error: %v | want: %v", err, test.wantErr)
 			}
@@ -837,15 +837,15 @@ func Test_publicKey_Verify(t *testing.T) {
 	type (
 		testCase struct {
 			name     string
-			pbKey    PublicKey
-			signable Signable
+			pbKey    crypto.PublicKey
+			signable crypto.Signable
 			want     bool
 			wantErr  bool
 		}
 		testList []testCase
 	)
 
-	algos := GetAlgos()
+	algos := crypto.GetAlgos()
 	tests := make(testList, 0, algos.Len()*2+5)
 	for name, algo := range algos {
 		_, notEq := mockGenerateKeyPair(algo)
@@ -859,15 +859,15 @@ func Test_publicKey_Verify(t *testing.T) {
 			name:     name + "_FALSE",
 			pbKey:    notEq,
 			signable: signable,
-			wantErr:  algo == RSA,
+			wantErr:  algo == crypto.RSA,
 		})
 	}
 
-	signable, prKey := mockSignable(Ed25519, 1024)
+	signable, prKey := mockSignable(crypto.Ed25519, 1024)
 	pbKey := prKey.PublicKey()
 	tests = append(tests, testCase{
 		name:     "nil_ki_PublicKey_ERR",
-		pbKey:    NewPublicKey(nil),
+		pbKey:    crypto.NewPublicKey(nil),
 		signable: nil,
 		wantErr:  true,
 	}, testCase{
@@ -878,17 +878,17 @@ func Test_publicKey_Verify(t *testing.T) {
 	}, testCase{
 		name:     "nil_blob_Signable_ERR",
 		pbKey:    pbKey,
-		signable: &SignableStub{Sign: signable.GetSignature()},
+		signable: &crypto.SignableStub{Sign: signable.GetSignature()},
 		wantErr:  true,
 	}, testCase{
 		name:     "nil_Signature_ERR",
 		pbKey:    pbKey,
-		signable: &SignableStub{},
+		signable: &crypto.SignableStub{},
 		wantErr:  true,
 	}, testCase{
 		name:     "nil_blob_Signature_ERR",
 		pbKey:    pbKey,
-		signable: &SignableStub{Sign: NewSignature(nil)},
+		signable: &crypto.SignableStub{Sign: crypto.NewSignature(nil)},
 		wantErr:  true,
 	})
 

@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package equal_test
 
@@ -8,16 +8,17 @@ import (
 	"testing"
 
 	"github.com/evenlab/go-kit/bytes"
-	. "github.com/evenlab/go-kit/equal"
+
+	"github.com/evenlab/go-kit/equal"
 )
 
 func Benchmark_BasicEqual(b *testing.B) {
 	const size = 1024
 	blob := bytes.RandBytes(size)
-	equaler := NewEqualer(blob)
+	equaler := equal.NewEqualer(blob)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = BasicEqual(equaler, equaler)
+		_ = equal.BasicEqual(equaler, equaler)
 	}
 }
 
@@ -26,14 +27,14 @@ func Benchmark_NewEqualer(b *testing.B) {
 	blob := bytes.RandBytes(size)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = NewEqualer(blob)
+		_ = equal.NewEqualer(blob)
 	}
 }
 
 func Benchmark_equaler_Raw(b *testing.B) {
 	const size = 1024
 	blob := bytes.RandBytes(size)
-	equaler := NewEqualer(blob)
+	equaler := equal.NewEqualer(blob)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := equaler.Raw(); err != nil {
@@ -50,14 +51,14 @@ func Test_BasicEqual(t *testing.T) {
 
 	tests := [7]struct {
 		name string
-		equ1 Equaler
-		equ2 Equaler
+		equ1 equal.Equaler
+		equ2 equal.Equaler
 		want bool
 	}{
 		{
 			name: "TRUE",
-			equ1: NewEqualer(blob),
-			equ2: NewEqualer(blob),
+			equ1: equal.NewEqualer(blob),
+			equ2: equal.NewEqualer(blob),
 			want: true,
 		},
 		{
@@ -68,28 +69,28 @@ func Test_BasicEqual(t *testing.T) {
 		},
 		{
 			name: "FALSE",
-			equ1: NewEqualer(blob),
-			equ2: NewEqualer(bytes.RandBytes(size)),
+			equ1: equal.NewEqualer(blob),
+			equ2: equal.NewEqualer(bytes.RandBytes(size)),
 		},
 		{
 			name: "nil_Equ1_FALSE",
 			equ1: nil,
-			equ2: NewEqualer(blob),
+			equ2: equal.NewEqualer(blob),
 		},
 		{
 			name: "nil_Equ2_FALSE",
-			equ1: NewEqualer(blob),
+			equ1: equal.NewEqualer(blob),
 			equ2: nil,
 		},
 		{
 			name: "zero_size_Equ1_FALSE",
-			equ1: NewEqualer(make([]byte, 0)),
-			equ2: NewEqualer(blob),
+			equ1: equal.NewEqualer(make([]byte, 0)),
+			equ2: equal.NewEqualer(blob),
 		},
 		{
 			name: "zero_size_Equ2_FALSE",
-			equ1: NewEqualer(blob),
-			equ2: NewEqualer(make([]byte, 0)),
+			equ1: equal.NewEqualer(blob),
+			equ2: equal.NewEqualer(make([]byte, 0)),
 		},
 	}
 
@@ -98,7 +99,7 @@ func Test_BasicEqual(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := BasicEqual(test.equ1, test.equ2); got != test.want {
+			if got := equal.BasicEqual(test.equ1, test.equ2); got != test.want {
 				t.Errorf("BasicEqual() got: %v | want: %v", got, test.want)
 			}
 		})
@@ -128,7 +129,7 @@ func Test_NewEqualer(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			equaler := NewEqualer(test.blob)
+			equaler := equal.NewEqualer(test.blob)
 			if got, _ := equaler.Raw(); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("NewEqualer() got: %#v | want: %#v", got, test.want)
 			}
@@ -144,18 +145,18 @@ func Test_equaler_Raw(t *testing.T) {
 
 	tests := [2]struct {
 		name    string
-		equaler Equaler
+		equaler equal.Equaler
 		want    []byte
 		wantErr bool
 	}{
 		{
 			name:    "OK",
-			equaler: NewEqualer(blob),
+			equaler: equal.NewEqualer(blob),
 			want:    blob,
 		},
 		{
 			name:    "ERR",
-			equaler: NewEqualer(nil),
+			equaler: equal.NewEqualer(nil),
 			wantErr: true,
 		},
 	}
