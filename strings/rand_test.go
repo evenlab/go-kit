@@ -1,49 +1,40 @@
 // Copyright © 2020-2022 The EVEN Solutions Developers Team
 
-package strings
+package strings_test
 
 import (
 	"reflect"
 	"testing"
+
+	"github.com/evenlab/go-kit/strings"
 )
-
-func Test_NewRand(t *testing.T) {
-	t.Parallel()
-
-	tests := [0]struct {
-		name string
-		opts []RandOpt
-		want Rand
-	}{}
-
-	for idx := range tests {
-		test := tests[idx]
-		t.Run(test.name, func(t *testing.T) {
-			t.Parallel()
-
-			if got := NewRand(test.opts...); !reflect.DeepEqual(got, test.want) {
-				t.Errorf("NewRand() = %v, want %v", got, test.want)
-			}
-		})
-	}
-}
 
 func Test_rand_Rand(t *testing.T) {
 	t.Parallel()
 
-	tests := [0]struct {
+	tests := [1]struct {
 		name string
-		opts []RandOpt
+		opts []strings.RandOpt
 		want string
-	}{}
+	}{
+		{
+			name: "OK",
+			opts: []strings.RandOpt{
+				strings.RandSize(10),
+				strings.RandDict("0"),
+			},
+			want: "0000000000",
+		},
+	}
 
 	for idx := range tests {
 		test := tests[idx]
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := (&rand{}).Rand(test.opts...); got != test.want {
-				t.Errorf("Rand() = %v, want %v", got, test.want)
+			rand := strings.NewRand()
+			if got := rand.Rand(test.opts...); got != test.want {
+				t.Errorf("Rand() got: %v | want: %v", got, test.want)
 			}
 		})
 	}
@@ -52,31 +43,26 @@ func Test_rand_Rand(t *testing.T) {
 func Test_rand_SetDict(t *testing.T) {
 	t.Parallel()
 
-	type fields struct {
-		dict RandDict
-		size RandSize
+	tests := [1]struct {
+		name string
+		dict strings.RandDict
+		want strings.Rand
+	}{
+		{
+			name: "OK",
+			dict: "0",
+			want: strings.NewRand(strings.RandDict("0")),
+		},
 	}
-	type args struct {
-		dict RandDict
-	}
-	tests := [0]struct {
-		name   string
-		fields fields
-		args   args
-		want   Rand
-	}{}
 
 	for idx := range tests {
 		test := tests[idx]
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			s := &rand{
-				dict: test.fields.dict,
-				size: test.fields.size,
-			}
-			if got := s.SetDict(test.args.dict); !reflect.DeepEqual(got, test.want) {
-				t.Errorf("SetDict() = %v, want %v", got, test.want)
+			rand := strings.NewRand()
+			if got := rand.SetDict(test.dict); !reflect.DeepEqual(got, test.want) {
+				t.Errorf("SetDict() got: %v | want: %v", got, test.want)
 			}
 		})
 	}
@@ -85,64 +71,26 @@ func Test_rand_SetDict(t *testing.T) {
 func Test_rand_SetSize(t *testing.T) {
 	t.Parallel()
 
-	type fields struct {
-		dict RandDict
-		size RandSize
+	tests := [1]struct {
+		name string
+		size strings.RandSize
+		want strings.Rand
+	}{
+		{
+			name: "OK",
+			size: 10,
+			want: strings.NewRand(strings.RandSize(10)),
+		},
 	}
-	type args struct {
-		size RandSize
-	}
-	tests := [0]struct {
-		name   string
-		fields fields
-		args   args
-		want   Rand
-	}{}
 
 	for idx := range tests {
 		test := tests[idx]
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			s := &rand{
-				dict: test.fields.dict,
-				size: test.fields.size,
-			}
-			if got := s.SetSize(test.args.size); !reflect.DeepEqual(got, test.want) {
-				t.Errorf("SetSize() = %v, want %v", got, test.want)
-			}
-		})
-	}
-}
-
-func Test_rand_apply(t *testing.T) {
-	t.Parallel()
-
-	type fields struct {
-		dict RandDict
-		size RandSize
-	}
-	type args struct {
-		opts []RandOpt
-	}
-	tests := [0]struct {
-		name   string
-		fields fields
-		args   args
-		want   Rand
-	}{}
-
-	for idx := range tests {
-		test := tests[idx]
-		t.Run(test.name, func(t *testing.T) {
-			t.Parallel()
-
-			s := &rand{
-				dict: test.fields.dict,
-				size: test.fields.size,
-			}
-			if got := s.apply(test.args.opts...); !reflect.DeepEqual(got, test.want) {
-				t.Errorf("apply() = %v, want %v", got, test.want)
+			rand := strings.NewRand()
+			if got := rand.SetSize(test.size); !reflect.DeepEqual(got, test.want) {
+				t.Errorf("SetSize() got: %v | want: %v", got, test.want)
 			}
 		})
 	}

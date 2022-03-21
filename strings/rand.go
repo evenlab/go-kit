@@ -35,11 +35,14 @@ type (
 
 // NewRand returns constructed string randomizer.
 func NewRand(opts ...RandOpt) Rand {
-	if len(opts) == 0 {
-		opts = append(opts, DefaultRandDict)
+	r := &rand{}
+
+	r.apply(opts...)
+	if r.dict == "" {
+		r.SetDict(DefaultRandDict)
 	}
 
-	return (&rand{}).apply(opts...)
+	return r
 }
 
 // Rand implements Rand interface.

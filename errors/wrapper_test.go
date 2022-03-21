@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package errors_test
 
@@ -7,11 +7,11 @@ import (
 	"log"
 	"testing"
 
-	kit "github.com/evenlab/go-kit/errors"
+	errKIT "github.com/evenlab/go-kit/errors"
 )
 
 func Benchmark_wrapper_Error(b *testing.B) {
-	err := kit.WrapErr(wrapErrorMsg, kit.New(testErrorMsg))
+	err := errKIT.WrapErr(wrapErrorMsg, errKIT.New(testErrorMsg))
 	if err == nil {
 		log.Fatal("want error interface but got nil value")
 	}
@@ -22,8 +22,8 @@ func Benchmark_wrapper_Error(b *testing.B) {
 }
 
 func Benchmark_wrapper_Unwrap(b *testing.B) {
-	wrapErr := kit.WrapErr(wrapErrorMsg, kit.New(testErrorMsg))
-	err, ok := wrapErr.(kit.Wrapper) // nolint: errorlint
+	wrapErr := errKIT.WrapErr(wrapErrorMsg, errKIT.New(testErrorMsg))
+	err, ok := wrapErr.(errKIT.Wrapper) // nolint: errorlint
 	if !ok {
 		log.Fatal("got not wrapper interface")
 	}
@@ -57,7 +57,7 @@ func Test_wrapper_Error(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := kit.WrapErr(testErrorMsg, kit.New(wrapErrorMsg)).Error()
+			got := errKIT.WrapErr(testErrorMsg, errKIT.New(wrapErrorMsg)).Error()
 			if (got != test.want) != test.wantErr {
 				t.Errorf("Error() got: %v | want: %v", got, test.wantErr)
 			}
@@ -68,8 +68,8 @@ func Test_wrapper_Error(t *testing.T) {
 func Test_wrapper_Unwrap(t *testing.T) {
 	t.Parallel()
 
-	testErr := kit.New(testErrorMsg)
-	wrapErr := kit.WrapErr(wrapErrorMsg, testErr)
+	testErr := errKIT.New(testErrorMsg)
+	wrapErr := errKIT.WrapErr(wrapErrorMsg, testErr)
 
 	tests := [2]struct {
 		name    string
@@ -80,13 +80,13 @@ func Test_wrapper_Unwrap(t *testing.T) {
 		{
 			name:    "TRUE",
 			testErr: testErr,
-			wrapErr: kit.WrapErr(wrapErrorMsg, wrapErr),
+			wrapErr: errKIT.WrapErr(wrapErrorMsg, wrapErr),
 			want:    true,
 		},
 		{
 			name:    "FALSE",
 			testErr: testErr,
-			wrapErr: kit.WrapErr(wrapErrorMsg, kit.New(testErrorMsg)),
+			wrapErr: errKIT.WrapErr(wrapErrorMsg, errKIT.New(testErrorMsg)),
 			want:    false,
 		},
 	}
