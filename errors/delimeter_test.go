@@ -1,28 +1,28 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package errors_test
 
 import (
 	"testing"
 
-	. "github.com/evenlab/go-kit/errors"
+	"github.com/evenlab/go-kit/errors"
 )
 
 var (
-	defaultDelimiter = GetDelimiter()
+	defaultDelimiter = errors.GetDelimiter()
 )
 
 func Benchmark_GetDelimiter(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = GetDelimiter()
+		_ = errors.GetDelimiter()
 	}
 }
 
 func Benchmark_SetDelimiter(b *testing.B) {
-	delim := GetDelimiter()
+	delim := errors.GetDelimiter()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		SetDelimiter(delim)
+		errors.SetDelimiter(delim)
 	}
 }
 
@@ -44,7 +44,7 @@ func Test_GetDelimiter(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := GetDelimiter(); got != test.want {
+			if got := errors.GetDelimiter(); got != test.want {
 				t.Errorf("GetDelimiter() got: %v | want: %v", got, test.want)
 			}
 		})
@@ -69,10 +69,10 @@ func Test_SetDelimiter(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			delim := GetDelimiter()  // save current delimiter
-			SetDelimiter(test.delim) // set test delimiter
-			got := GetDelimiter()    // get test delimiter
-			SetDelimiter(delim)      // restore previous delimiter
+			delim := errors.GetDelimiter()  // save current delimiter
+			errors.SetDelimiter(test.delim) // set test delimiter
+			got := errors.GetDelimiter()    // get test delimiter
+			errors.SetDelimiter(delim)      // restore previous delimiter
 
 			if got != test.delim { // check test delimiter
 				t.Errorf("SetDelimiter() got: %v | want: %v", got, test.delim)

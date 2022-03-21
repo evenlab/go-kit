@@ -1,18 +1,18 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package bytes_test
 
 import (
 	"testing"
 
-	. "github.com/evenlab/go-kit/bytes"
+	"github.com/evenlab/go-kit/bytes"
 )
 
 func Benchmark_RandBytes(b *testing.B) {
 	const size = 1024
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = RandBytes(size)
+		_ = bytes.RandBytes(size)
 	}
 }
 
@@ -34,7 +34,7 @@ func Test_RandBytes(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := RandBytes(test.size); len(got) != test.size {
+			if got := bytes.RandBytes(test.size); len(got) != test.size {
 				t.Errorf("RandBytes() size: %v | want: %v", got, test.size)
 			}
 		})

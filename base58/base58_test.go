@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package base58_test
 
@@ -7,8 +7,9 @@ import (
 	"reflect"
 	"testing"
 
-	. "github.com/evenlab/go-kit/base58"
 	"github.com/evenlab/go-kit/bytes"
+
+	"github.com/evenlab/go-kit/base58"
 )
 
 const (
@@ -16,10 +17,10 @@ const (
 )
 
 func Benchmark_Decode(b *testing.B) {
-	base58 := []byte(strBase58)
+	blob := []byte(strBase58)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		if _, err := Decode(base58); err != nil {
+		if _, err := base58.Decode(blob); err != nil {
 			b.Fatal(err)
 		}
 	}
@@ -27,7 +28,7 @@ func Benchmark_Decode(b *testing.B) {
 
 func Benchmark_DecodeString(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		if _, err := DecodeString(strBase58); err != nil {
+		if _, err := base58.DecodeString(strBase58); err != nil {
 			b.Fatal(err)
 		}
 	}
@@ -37,7 +38,7 @@ func Benchmark_Encode(b *testing.B) {
 	blob := bytes.RandBytes(28)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = Encode(blob)
+		_ = base58.Encode(blob)
 	}
 }
 
@@ -45,7 +46,7 @@ func Benchmark_EncodeToString(b *testing.B) {
 	blob := bytes.RandBytes(28)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = EncodeToString(blob)
+		_ = base58.EncodeToString(blob)
 	}
 }
 
@@ -92,7 +93,7 @@ func Test_Decode(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := Decode(test.base)
+			got, err := base58.Decode(test.base)
 			if (err != nil) != test.wantErr {
 				t.Errorf("Decode() error: %v | want: %v", err, test.wantErr)
 				return
@@ -147,7 +148,7 @@ func Test_DecodeString(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := DecodeString(test.base)
+			got, err := base58.DecodeString(test.base)
 			if (err != nil) != test.wantErr {
 				t.Errorf("DecodeString() error: %v | want: %v", err, test.wantErr)
 				return
@@ -186,7 +187,7 @@ func Test_Encode(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := Encode(test.blob); !reflect.DeepEqual(got, test.want) {
+			if got := base58.Encode(test.blob); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("Encode() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -220,7 +221,7 @@ func Test_EncodeToString(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := EncodeToString(test.blob); got != test.want {
+			if got := base58.EncodeToString(test.blob); got != test.want {
 				t.Errorf("EncodeToString() pass: %#v got: %v | want: %v", test.blob, got, test.want)
 			}
 		})

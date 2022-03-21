@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package errors
 
@@ -32,6 +32,9 @@ func Unwrap(err error) error {
 // WrapErr returns an error that formats the given string and
 // wrapped the given error with Delimiter in the middle.
 func WrapErr(s string, w error) error {
+	rwDelimMutex.RLock()
+	defer rwDelimMutex.RUnlock()
+
 	return &wrapper{
 		err: w,
 		txt: s + delimiter + w.Error(),
@@ -41,6 +44,9 @@ func WrapErr(s string, w error) error {
 // WrapStr returns an error that formats the given string and
 // wrapped the given string converted to error with Delimiter in the middle.
 func WrapStr(s, w string) error {
+	rwDelimMutex.RLock()
+	defer rwDelimMutex.RUnlock()
+
 	return &wrapper{
 		err: New(w),
 		txt: s + delimiter + w,

@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package timestamp_test
 
@@ -10,7 +10,7 @@ import (
 	json "github.com/json-iterator/go"
 	"google.golang.org/protobuf/proto"
 
-	. "github.com/evenlab/go-kit/timestamp"
+	"github.com/evenlab/go-kit/timestamp"
 	"github.com/evenlab/go-kit/timestamp/proto/pb"
 )
 
@@ -20,27 +20,27 @@ const (
 
 func Benchmark_Now(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = Now()
+		_ = timestamp.Now()
 	}
 }
 
 func Benchmark_DecodeTimestamp(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	pbuf, _ := ts.Encode()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		if _, err := DecodeTimestamp(pbuf); err != nil {
+		if _, err := timestamp.DecodeTimestamp(pbuf); err != nil {
 			b.Fatal(err)
 		}
 	}
 }
 
 func Benchmark_Timestamp_Decode(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	pbuf, _ := ts.Encode()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		ts := Timestamp{}
+		ts := timestamp.Timestamp{}
 		if err := ts.Decode(pbuf); err != nil {
 			b.Fatal(err)
 		}
@@ -48,7 +48,7 @@ func Benchmark_Timestamp_Decode(b *testing.B) {
 }
 
 func Benchmark_Timestamp_Encode(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := ts.Encode(); err != nil {
@@ -58,7 +58,7 @@ func Benchmark_Timestamp_Encode(b *testing.B) {
 }
 
 func Benchmark_Timestamp_Marshal(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := ts.Marshal(); err != nil {
@@ -68,7 +68,7 @@ func Benchmark_Timestamp_Marshal(b *testing.B) {
 }
 
 func Benchmark_Timestamp_MarshalJSON(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if _, err := ts.MarshalJSON(); err != nil {
@@ -79,7 +79,7 @@ func Benchmark_Timestamp_MarshalJSON(b *testing.B) {
 
 func Benchmark_Timestamp_Parse(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		ts := Timestamp{}
+		ts := timestamp.Timestamp{}
 		if err := ts.Parse(testTimestampLayout); err != nil {
 			b.Fatal(err)
 		}
@@ -87,7 +87,7 @@ func Benchmark_Timestamp_Parse(b *testing.B) {
 }
 
 func Benchmark_Timestamp_Pretty(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = ts.Pretty()
@@ -95,7 +95,7 @@ func Benchmark_Timestamp_Pretty(b *testing.B) {
 }
 
 func Benchmark_Timestamp_String(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = ts.String()
@@ -103,7 +103,7 @@ func Benchmark_Timestamp_String(b *testing.B) {
 }
 
 func Benchmark_Timestamp_UnixNanoStr(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = ts.UnixNanoStr()
@@ -111,11 +111,11 @@ func Benchmark_Timestamp_UnixNanoStr(b *testing.B) {
 }
 
 func Benchmark_Timestamp_Unmarshal(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	blob, _ := ts.Marshal()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		ts := Timestamp{}
+		ts := timestamp.Timestamp{}
 		if err := ts.Unmarshal(blob); err != nil {
 			b.Fatal(err)
 		}
@@ -123,11 +123,11 @@ func Benchmark_Timestamp_Unmarshal(b *testing.B) {
 }
 
 func Benchmark_Timestamp_UnmarshalJSON(b *testing.B) {
-	ts := Now()
+	ts := timestamp.Now()
 	blob, _ := ts.MarshalJSON()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		ts := Timestamp{}
+		ts := timestamp.Timestamp{}
 		if err := ts.UnmarshalJSON(blob); err != nil {
 			b.Fatal(err)
 		}
@@ -156,7 +156,7 @@ func Test_Now(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			zone, offset := Now().Zone()
+			zone, offset := timestamp.Now().Zone()
 			if zone != test.wantZone {
 				t.Errorf("Now() zone: %#v | want: %#v", zone, test.wantZone)
 			}
@@ -170,13 +170,13 @@ func Test_Now(t *testing.T) {
 func Test_DecodeTimestamp(t *testing.T) {
 	t.Parallel()
 
-	ts := Now()
+	ts := timestamp.Now()
 	blob, _ := ts.MarshalBinary()
 
 	tests := [4]struct {
 		name    string
 		pbuf    *pb.Timestamp
-		want    Timestamp
+		want    timestamp.Timestamp
 		wantErr bool
 	}{
 		{
@@ -211,7 +211,7 @@ func Test_DecodeTimestamp(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := DecodeTimestamp(test.pbuf)
+			got, err := timestamp.DecodeTimestamp(test.pbuf)
 			if (err != nil) != test.wantErr {
 				t.Errorf("DecodeTimestamp() error: %v | want: %v", err, test.wantErr)
 				return
@@ -226,13 +226,13 @@ func Test_DecodeTimestamp(t *testing.T) {
 func Test_Timestamp_Decode(t *testing.T) {
 	t.Parallel()
 
-	ts := Now()
+	ts := timestamp.Now()
 	blob, _ := ts.MarshalBinary()
 
 	tests := [4]struct {
 		name    string
 		pbuf    *pb.Timestamp
-		want    Timestamp
+		want    timestamp.Timestamp
 		wantErr bool
 	}{
 		{
@@ -267,7 +267,7 @@ func Test_Timestamp_Decode(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := Timestamp{}
+			got := timestamp.Timestamp{}
 			err := got.Decode(test.pbuf)
 			if (err != nil) != test.wantErr {
 				t.Errorf("Decode() error: %v | want: %v", err, test.wantErr)
@@ -283,12 +283,12 @@ func Test_Timestamp_Decode(t *testing.T) {
 func Test_Timestamp_Encode(t *testing.T) {
 	t.Parallel()
 
-	ts := Now()
+	ts := timestamp.Now()
 	blob, _ := ts.Time.MarshalBinary()
 
 	tests := [3]struct {
 		name    string
-		time    Timestamp
+		time    timestamp.Timestamp
 		want    *pb.Timestamp
 		wantErr bool
 	}{
@@ -299,12 +299,12 @@ func Test_Timestamp_Encode(t *testing.T) {
 		},
 		{
 			name:    "fractional_Zone_Offset_ERR",
-			time:    Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
+			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
 			wantErr: true,
 		},
 		{
 			name:    "unexpected_Zone_Offset_ERR",
-			time:    Timestamp{Time: ts.In(time.FixedZone("unexpected zone offset", -60))},
+			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("unexpected zone offset", -60))},
 			wantErr: true,
 		},
 	}
@@ -329,13 +329,13 @@ func Test_Timestamp_Encode(t *testing.T) {
 func Test_Timestamp_Marshal(t *testing.T) {
 	t.Parallel()
 
-	ts := Now()
+	ts := timestamp.Now()
 	pbuf, _ := ts.Encode()
 	want, _ := proto.Marshal(pbuf)
 
 	tests := [3]struct {
 		name    string
-		time    Timestamp
+		time    timestamp.Timestamp
 		want    []byte
 		wantErr bool
 	}{
@@ -346,12 +346,12 @@ func Test_Timestamp_Marshal(t *testing.T) {
 		},
 		{
 			name:    "fractional_Zone_Offset_ERR",
-			time:    Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
+			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
 			wantErr: true,
 		},
 		{
 			name:    "unexpected_Zone_Offset_ERR",
-			time:    Timestamp{Time: ts.In(time.FixedZone("unexpected zone offset", -60))},
+			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("unexpected zone offset", -60))},
 			wantErr: true,
 		},
 	}
@@ -376,13 +376,13 @@ func Test_Timestamp_Marshal(t *testing.T) {
 func Test_Timestamp_MarshalJSON(t *testing.T) {
 	t.Parallel()
 
-	ts := Now()
+	ts := timestamp.Now()
 	pbuf, _ := ts.Encode()
 	want, _ := json.Marshal(pbuf)
 
 	tests := [3]struct {
 		name    string
-		time    Timestamp
+		time    timestamp.Timestamp
 		want    []byte
 		wantErr bool
 	}{
@@ -393,12 +393,12 @@ func Test_Timestamp_MarshalJSON(t *testing.T) {
 		},
 		{
 			name:    "fractional_Zone_Offset_ERR",
-			time:    Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
+			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
 			wantErr: true,
 		},
 		{
 			name:    "unexpected_Zone_Offset_ERR",
-			time:    Timestamp{Time: ts.In(time.FixedZone("unexpected zone offset", -60))},
+			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("unexpected zone offset", -60))},
 			wantErr: true,
 		},
 	}
@@ -446,7 +446,7 @@ func Test_Timestamp_Parse(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			ts := Timestamp{}
+			ts := timestamp.Timestamp{}
 			if err := ts.Parse(test.text); (err != nil) != test.wantErr {
 				t.Errorf("Parse() error: %v | want: %v", err, test.wantErr)
 				return
@@ -454,7 +454,7 @@ func Test_Timestamp_Parse(t *testing.T) {
 			if test.wantErr {
 				return
 			}
-			if got := ts.Format(LayoutTimestamp); got != test.want {
+			if got := ts.Format(timestamp.LayoutTimestamp); got != test.want {
 				t.Errorf("Parse() got: %v | want: %v", got, test.want)
 			}
 		})
@@ -464,7 +464,7 @@ func Test_Timestamp_Parse(t *testing.T) {
 func Test_Timestamp_Pretty(t *testing.T) {
 	t.Parallel()
 
-	ts := Timestamp{}
+	ts := timestamp.Timestamp{}
 	if err := ts.Parse(testTimestampLayout); err != nil {
 		t.Errorf("Parse() error: %v", err)
 		return
@@ -472,7 +472,7 @@ func Test_Timestamp_Pretty(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		time Timestamp
+		time timestamp.Timestamp
 		want string
 	}{
 		{
@@ -497,7 +497,7 @@ func Test_Timestamp_Pretty(t *testing.T) {
 func Test_Timestamp_String(t *testing.T) {
 	t.Parallel()
 
-	ts := Timestamp{}
+	ts := timestamp.Timestamp{}
 	if err := ts.Parse(testTimestampLayout); err != nil {
 		t.Errorf("Parse() error: %v", err)
 		return
@@ -505,7 +505,7 @@ func Test_Timestamp_String(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		time Timestamp
+		time timestamp.Timestamp
 		want string
 	}{
 		{
@@ -530,7 +530,7 @@ func Test_Timestamp_String(t *testing.T) {
 func Test_Timestamp_UnixNanoStr(t *testing.T) {
 	t.Parallel()
 
-	ts := Timestamp{}
+	ts := timestamp.Timestamp{}
 	if err := ts.Parse(testTimestampLayout); err != nil {
 		t.Errorf("Parse() error: %v", err)
 		return
@@ -538,7 +538,7 @@ func Test_Timestamp_UnixNanoStr(t *testing.T) {
 
 	tests := [1]struct {
 		name string
-		time Timestamp
+		time timestamp.Timestamp
 		want string
 	}{
 		{
@@ -563,13 +563,13 @@ func Test_Timestamp_UnixNanoStr(t *testing.T) {
 func Test_Timestamp_Unmarshal(t *testing.T) {
 	t.Parallel()
 
-	ts := Now()
+	ts := timestamp.Now()
 	blob, _ := ts.Marshal()
 
 	tests := [2]struct {
 		name    string
 		blob    []byte
-		want    Timestamp
+		want    timestamp.Timestamp
 		wantErr bool
 	}{
 		{
@@ -589,7 +589,7 @@ func Test_Timestamp_Unmarshal(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := Timestamp{}
+			got := timestamp.Timestamp{}
 			if err := got.Unmarshal(test.blob); (err != nil) != test.wantErr {
 				t.Errorf("Unmarshal() error: %v | want: %v", err, test.wantErr)
 				return
@@ -604,13 +604,13 @@ func Test_Timestamp_Unmarshal(t *testing.T) {
 func Test_Timestamp_UnmarshalJSON(t *testing.T) {
 	t.Parallel()
 
-	ts := Now()
+	ts := timestamp.Now()
 	blob, _ := ts.MarshalJSON()
 
 	tests := [2]struct {
 		name    string
 		blob    []byte
-		want    Timestamp
+		want    timestamp.Timestamp
 		wantErr bool
 	}{
 		{
@@ -630,7 +630,7 @@ func Test_Timestamp_UnmarshalJSON(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := Timestamp{}
+			got := timestamp.Timestamp{}
 			if err := got.UnmarshalJSON(test.blob); (err != nil) != test.wantErr {
 				t.Errorf("UnmarshalJSON() error: %v | want: %v", err, test.wantErr)
 				return

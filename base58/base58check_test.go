@@ -1,4 +1,4 @@
-// Copyright © 2020-2021 The EVEN Solutions Developers Team
+// Copyright © 2020-2022 The EVEN Solutions Developers Team
 
 package base58_test
 
@@ -7,37 +7,38 @@ import (
 	"reflect"
 	"testing"
 
-	. "github.com/evenlab/go-kit/base58"
 	"github.com/evenlab/go-kit/bytes"
 	"github.com/evenlab/go-kit/errors"
+
+	"github.com/evenlab/go-kit/base58"
 )
 
 func Benchmark_CheckDecode(b *testing.B) {
-	base58 := []byte(strBase58)
+	blob := []byte(strBase58)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		if _, _, err := CheckDecode(base58); err != nil {
+		if _, _, err := base58.CheckDecode(blob); err != nil {
 			b.Fatal(err)
 		}
 	}
 }
 
 func Benchmark_CheckEncode(b *testing.B) {
-	blob, ver, err := CheckDecode([]byte(strBase58))
+	blob, ver, err := base58.CheckDecode([]byte(strBase58))
 	if err != nil {
 		b.Fatal(err)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = CheckEncode(blob, ver)
+		_ = base58.CheckEncode(blob, ver)
 	}
 }
 
 func Benchmark_Checksum(b *testing.B) {
-	base58 := []byte(strBase58)
+	blob := []byte(strBase58)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = Checksum(base58)
+		_ = base58.Checksum(blob)
 	}
 }
 
@@ -68,16 +69,16 @@ func Test_CheckDecode(t *testing.T) {
 
 	// append test unknown format error
 	tests = append(tests, testCase{
-		name:    ErrUnknownFormatMsg + "_ERR",
+		name:    base58.ErrUnknownFormatMsg + "_ERR",
 		blob:    []byte("3MNQE10"),
-		wantErr: ErrUnknownFormat(),
+		wantErr: base58.ErrUnknownFormat(),
 	})
 
 	// append test checksum error
 	tests = append(tests, testCase{
-		name:    ErrChecksumMismatchMsg + "_ERR",
+		name:    base58.ErrChecksumMismatchMsg + "_ERR",
 		blob:    []byte("3MNQE1Y"),
-		wantErr: ErrChecksumMismatch(),
+		wantErr: base58.ErrChecksumMismatch(),
 	})
 
 	// append tests invalid formats error - string with size below 5
@@ -88,9 +89,9 @@ func Test_CheckDecode(t *testing.T) {
 			blob[idx] = '1'
 		}
 		tests = append(tests, testCase{
-			name:    ErrInvalidFormatMsg + "_ERR",
+			name:    base58.ErrInvalidFormatMsg + "_ERR",
 			blob:    blob,
-			wantErr: ErrInvalidFormat(),
+			wantErr: base58.ErrInvalidFormat(),
 		})
 	}
 
@@ -99,7 +100,7 @@ func Test_CheckDecode(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, ver, err := CheckDecode(test.blob)
+			got, ver, err := base58.CheckDecode(test.blob)
 			if !errors.Is(err, test.wantErr) {
 				t.Errorf("CheckDecode() error: %v | want: %v", err, test.wantErr)
 				return
@@ -143,7 +144,7 @@ func Test_CheckEncode(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := CheckEncode(test.base, test.ver); got != test.want {
+			if got := base58.CheckEncode(test.base, test.ver); got != test.want {
 				t.Errorf("CheckEncode() got: %#v | want: %#v", got, test.want)
 			}
 		})
@@ -153,15 +154,15 @@ func Test_CheckEncode(t *testing.T) {
 func Test_Checksum(t *testing.T) {
 	t.Parallel()
 
-	blob, want := bytes.RandBytes(1024), [ChecksumSize]byte{}
+	blob, want := bytes.RandBytes(1024), [base58.ChecksumSize]byte{}
 	h256 := sha256.Sum256(blob)
 	h256 = sha256.Sum256(h256[:])
-	copy(want[:], h256[:ChecksumSize])
+	copy(want[:], h256[:base58.ChecksumSize])
 
 	tests := [1]struct {
 		name string
 		blob []byte
-		want [ChecksumSize]byte
+		want [base58.ChecksumSize]byte
 	}{
 		{
 			name: "OK",
@@ -175,7 +176,7 @@ func Test_Checksum(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			if got := Checksum(test.blob); !reflect.DeepEqual(got, test.want) {
+			if got := base58.Checksum(test.blob); !reflect.DeepEqual(got, test.want) {
 				t.Errorf("Checksum() got: %#v | want: %#v", got, test.want)
 			}
 		})

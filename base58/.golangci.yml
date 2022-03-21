@@ -1,0 +1,100 @@
+output:
+  format: colored-line-number
+  modules-download-mode: mod
+  sort-results: true
+  tests: false # don't include test files
+
+linters:
+  enable-all: true
+  disable:
+    - containedctx # overhead
+    - cyclop # overhead
+    - dupl # overhead
+    - exhaustivestruct # overhead
+    - gofumpt # overhead
+    - gochecknoglobals # overhead
+    - goimports # overhead
+    - golint # deprecated
+    - interfacer # deprecated
+    - ireturn # overhead
+    - maligned # deprecated
+    - scopelint # deprecated
+    - tagliatelle # overhead
+    - testpackage # overhead
+    - varnamelen # overhead
+    - wrapcheck # overhead
+    - wsl # overhead
+
+linters-settings:
+  gci:
+    # put imports beginning with prefix after 3rd-party packages;
+    # only support one prefix
+    # if not set, use goimports.local-prefixes
+    local-prefixes: github.com/evenlab/go-kit/base58
+    # Checks that no inline Comments are present.
+    # Default: false
+    no-inlineComments: true
+    # Checks that no prefix Comments(comment lines above an import) are present.
+    # Default: false
+    no-prefixComments: true
+    # Section configuration to compare against.
+    # Section names are case-insensitive and may contain parameters in ().
+    # Default: ["standard", "default"]
+    sections:
+      - standard # Captures all standard packages if they do not match another section.
+      - default # Contains all imports that could not be matched to another section type.
+      - comment(your text here) # Prints the specified indented comment.
+      - newLine # Prints an empty line
+      - prefix(github.com/org/project) # Groups all imports with the specified Prefix.
+    # Separators that should be present between sections.
+    # Default: ["newLine"]
+    sectionSeparators:
+      - newLine
+
+  errcheck:
+    check-type-assertions: true # report about errors in type assertions: `a := b.(MyStruct)`
+    check-blank: true # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`
+    # list of functions to exclude from checking, where each entry is a single function to exclude.
+    # see https://github.com/kisielk/errcheck#excluding-functions for details
+    exclude-functions:
+      - io.Copy
+      - io/ioutil.ReadFile
+      - strconv.Atoi
+      - os.UserConfigDir
+
+  errorlint:
+    asserts: true # Check for plain type assertions and type switches
+    comparison: true # Check for plain error comparisons
+
+  forbidigo:
+    forbid: # Forbid the following identifiers (identifiers are written using regexp):
+      - ^print*$
+      - 'fmt\.*'
+
+  gofumpt:
+    lang-version: "1.17" # Select the Go version to target.
+
+  gosimple:
+    go: "1.17" # Select the Go version to target.
+    checks: [ "all" ] # https://staticcheck.io/docs/options#checks
+
+  maligned:
+    suggest-new: true # print struct with more effective memory layout or not.
+
+  unused:
+    go: "1.17" # Select the Go version to target.
+
+issues:
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: _test\.go
+      linters:
+        - dupl
+        - errcheck
+        - gochecknoglobals
+        - gocritic
+        - goerr113
+        - funlen
+        - nlreturn
+        - unparam
+        - wsl
