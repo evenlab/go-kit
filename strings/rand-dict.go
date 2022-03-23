@@ -14,5 +14,5 @@ var (
 
 // apply implements RandOpt interface.
 func (s RandDict) apply(r *rand) {
-	r.SetDict(s)
+	r.setDict(s)
 }
