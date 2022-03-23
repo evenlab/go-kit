@@ -39,7 +39,7 @@ func NewRand(opts ...RandOpt) Rand {
 
 	r.apply(opts...)
 	if r.dict == "" {
-		r.SetDict(DefaultRandDict)
+		r.dict = DefaultRandDict
 	}
 
 	return r
@@ -47,20 +47,19 @@ func NewRand(opts ...RandOpt) Rand {
 
 // Rand implements Rand interface.
 func (s *rand) Rand(opts ...RandOpt) string {
+	s.sync.Lock()
+	defer s.sync.Unlock()
+
 	if len(opts) > 0 {
-		s.sync.RLock()
 		defer s.apply(s.dict, s.size) // backup current options
-		s.sync.RUnlock()
 		s.apply(opts...)
 	}
 
-	s.sync.RLock()
 	size := int(s.size)
 	blob, dictSize := bytes.RandBytes(size), len(s.dict)
 	for i := 0; i < size; i++ {
 		blob[i] = s.dict[int(blob[i])%dictSize]
 	}
-	s.sync.RUnlock()
 
 	builder := strings.Builder{}
 	_, _ = builder.Write(blob)
@@ -93,4 +92,14 @@ func (s *rand) apply(opts ...RandOpt) Rand {
 	}
 
 	return s
+}
+
+// SetDict implements Rand interface.
+func (s *rand) setDict(dict RandDict) {
+	s.dict = dict
+}
+
+// SetSize implements Rand interface.
+func (s *rand) setSize(size RandSize) {
+	s.size = size
 }

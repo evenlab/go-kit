@@ -14,5 +14,5 @@ var (
 
 // apply implements RandOpt interface.
 func (s RandSize) apply(r *rand) {
-	r.SetSize(s)
+	r.setSize(s)
 }
