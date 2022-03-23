@@ -286,7 +286,7 @@ func Test_Timestamp_Encode(t *testing.T) {
 	ts := timestamp.Now()
 	blob, _ := ts.Time.MarshalBinary()
 
-	tests := [3]struct {
+	tests := [2]struct {
 		name    string
 		time    timestamp.Timestamp
 		want    *pb.Timestamp
@@ -296,11 +296,6 @@ func Test_Timestamp_Encode(t *testing.T) {
 			name: "OK",
 			time: ts,
 			want: &pb.Timestamp{Blob: blob},
-		},
-		{
-			name:    "fractional_Zone_Offset_ERR",
-			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
-			wantErr: true,
 		},
 		{
 			name:    "unexpected_Zone_Offset_ERR",
@@ -333,7 +328,7 @@ func Test_Timestamp_Marshal(t *testing.T) {
 	pbuf, _ := ts.Encode()
 	want, _ := proto.Marshal(pbuf)
 
-	tests := [3]struct {
+	tests := [2]struct {
 		name    string
 		time    timestamp.Timestamp
 		want    []byte
@@ -343,11 +338,6 @@ func Test_Timestamp_Marshal(t *testing.T) {
 			name: "OK",
 			time: ts,
 			want: want,
-		},
-		{
-			name:    "fractional_Zone_Offset_ERR",
-			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
-			wantErr: true,
 		},
 		{
 			name:    "unexpected_Zone_Offset_ERR",
@@ -380,7 +370,7 @@ func Test_Timestamp_MarshalJSON(t *testing.T) {
 	pbuf, _ := ts.Encode()
 	want, _ := json.Marshal(pbuf)
 
-	tests := [3]struct {
+	tests := [2]struct {
 		name    string
 		time    timestamp.Timestamp
 		want    []byte
@@ -390,11 +380,6 @@ func Test_Timestamp_MarshalJSON(t *testing.T) {
 			name: "OK",
 			time: ts,
 			want: want,
-		},
-		{
-			name:    "fractional_Zone_Offset_ERR",
-			time:    timestamp.Timestamp{Time: ts.In(time.FixedZone("fractional zone offset", -1))},
-			wantErr: true,
 		},
 		{
 			name:    "unexpected_Zone_Offset_ERR",
