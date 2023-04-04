@@ -45,7 +45,7 @@ func Test_GetDelimiter(t *testing.T) {
 			t.Parallel()
 
 			if got := errors.GetDelimiter(); got != test.want {
-				t.Errorf("GetDelimiter() got: %v | want: %v", got, test.want)
+				t.Errorf("GetDelimiter() got: \"%v\" | want: \"%v\"", got, test.want)
 			}
 		})
 	}

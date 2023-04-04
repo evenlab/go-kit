@@ -9,7 +9,7 @@ import (
 	"github.com/evenlab/go-kit/equal"
 	"github.com/evenlab/go-kit/errors"
 	json "github.com/json-iterator/go"
-	"github.com/libp2p/go-libp2p-core/crypto"
+	"github.com/libp2p/go-libp2p/core/crypto"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/evenlab/go-kit/crypto/proto/pb"
@@ -18,7 +18,7 @@ import (
 type (
 	// PublicKey represents public key interface.
 	PublicKey interface {
-		// Embedded equaler interface.
+		// Equaler embedded equaler interface.
 		equal.Equaler
 
 		// Algo returns the public key Algo.

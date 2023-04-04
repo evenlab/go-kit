@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	json "github.com/json-iterator/go"
-	cc "github.com/libp2p/go-libp2p-core/crypto"
+	cc "github.com/libp2p/go-libp2p/core/crypto"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/evenlab/go-kit/crypto"

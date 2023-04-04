@@ -4,7 +4,7 @@ package crypto_test
 
 import (
 	"github.com/evenlab/go-kit/bytes"
-	cc "github.com/libp2p/go-libp2p-core/crypto"
+	cc "github.com/libp2p/go-libp2p/core/crypto"
 
 	"github.com/evenlab/go-kit/crypto"
 )

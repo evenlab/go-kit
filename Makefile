@@ -1,8 +1,5 @@
-.PHONY: pre-push go-mod check-commit
+.PHONY: pre-push
 pre-push: go-mod-tidy check-commit
-
-.PHONY: go-mod-upgrade go-mod-update go-mod-tidy
-go-mod-upgrade: go-mod-update go-mod-tidy
 
 go-mod-tidy:
 	@echo "mod tidy start..."
@@ -30,7 +27,12 @@ go-mod-tidy:
 	@cd ./timestamp && go mod download
 	@cd ./zero && go mod tidy
 	@cd ./zero && go mod download
+	@go mod tidy
+	@go mod download
 	@echo "mod tidy complete."
+
+.PHONY: go-mod-upgrade
+go-mod-upgrade: go-mod-update go-mod-tidy
 
 go-mod-update:
 	@echo "mod upgrade start..."
@@ -46,24 +48,30 @@ go-mod-update:
 	@cd ./strings && go get -u ./...
 	@cd ./timestamp && go get -u ./...
 	@cd ./zero && go get -u ./...
+	@go get -u ./...
 	@echo "mod upgrade complete."
 
-check-commit:
+.PHONY: check-commit
+check-commit: tests lints
+
+tests:
 	@echo "testing start..."
 	@go clean -testcache
-	@cd ./base58 && go test -race ./...
-	@cd ./bytes && go test -race ./...
-	@cd ./context && go test -race ./...
-	@cd ./crypto && go test -race ./...
-	@cd ./drive && go test -race ./...
-	@cd ./equal && go test -race ./...
-	@cd ./errors && go test -race ./...
-	@cd ./merkle && go test -race ./...
-	@cd ./network && go test -race ./...
-	@cd ./strings && go test -race ./...
-	@cd ./timestamp && go test -race ./...
-	@cd ./zero && go test -race ./...
+	@cd ./base58 && go test -race -short ./...
+	@cd ./bytes && go test -race -short ./...
+	@cd ./context && go test -race -short ./...
+	@cd ./crypto && go test -race -short ./...
+	@cd ./drive && go test -race -short ./...
+	@cd ./equal && go test -race -short ./...
+	@cd ./errors && go test -race -short ./...
+	@cd ./merkle && go test -race -short ./...
+	@cd ./network && go test -race -short ./...
+	@cd ./strings && go test -race -short ./...
+	@cd ./timestamp && go test -race -short ./...
+	@cd ./zero && go test -race -short ./...
 	@echo "test complete."
+
+lints:
 	@echo "linting start..."
 	@cd ./base58 && golangci-lint run
 	@cd ./bytes && golangci-lint run
@@ -79,12 +87,15 @@ check-commit:
 	@cd ./zero && golangci-lint run
 	@echo "lint complete."
 
-.PHONY: protoc-upgrade protoc-update generate-proto go-generate-proto
+.PHONY: protoc-upgrade
 protoc-upgrade: protoc-update generate-proto go-generate-proto
 
 protoc-update:
-	go get -u google.golang.org/protobuf@latest
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	@go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+.PHONY: go-generate-proto
+go-generate-proto: generate-proto go-generate-after
 
 generate-proto:
 	@echo "Compiling protobuf files..."
@@ -109,10 +120,8 @@ generate-proto:
 		--proto_path=timestamp/proto timestamp/proto/*.proto
 	@echo "Compiling completed."
 
-.PHONY: go-generate-proto generate-proto go-generate-after
-go-generate-proto: generate-proto go-generate-after
-
 go-generate-after:
-	@go get -d github.com/favadi/protoc-go-inject-tag && \
+	@go install github.com/favadi/protoc-go-inject-tag@latest && \
 	protoc-go-inject-tag -input=crypto/proto/pb/*.pb.go && \
 	protoc-go-inject-tag -input=timestamp/proto/pb/*.pb.go
+	@go mod tidy

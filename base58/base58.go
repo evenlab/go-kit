@@ -19,7 +19,7 @@ const (
 
 // Decode decodes base58 encoded bytes.
 func Decode(blob []byte) ([]byte, error) {
-	// nolint: goimports
+	//nolint: goimports
 	decodeTable := [256]byte{
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -39,7 +39,7 @@ func Decode(blob []byte) ([]byte, error) {
 		255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 	}
 
-	// nolint: gomnd
+	//nolint: gomnd
 	capacity := utf8.RuneCount(blob)*733/1000 + 1 // log(58) / log(256)
 	output := make([]byte, capacity)
 	outputSize := capacity - 1
@@ -50,10 +50,10 @@ func Decode(blob []byte) ([]byte, error) {
 		if !skipZeros {
 			if b == alphabetIdx0 {
 				leadZeros++
-				continue // nolint: nlreturn
-			} else {
-				skipZeros = true
+				continue //nolint: nlreturn
 			}
+
+			skipZeros = true
 		}
 
 		carry := int(decodeTable[b])
@@ -64,7 +64,7 @@ func Decode(blob []byte) ([]byte, error) {
 		idx := capacity - 1
 		for ; idx > outputSize || carry != 0; idx-- {
 			carry += alphabetSize * int(output[idx])
-			output[idx] = byte(rune(carry) % 256) // nolint: gomnd
+			output[idx] = byte(rune(carry) % 256) //nolint: gomnd
 			carry /= 256
 		}
 
@@ -89,7 +89,7 @@ func Encode(blob []byte) []byte {
 		leadZeros++
 	}
 
-	// nolint: gomnd
+	//nolint: gomnd
 	capacity := (size-leadZeros)*138/100 + 1 // log256 / log58
 	outputSize := capacity - 1
 
@@ -97,7 +97,7 @@ func Encode(blob []byte) []byte {
 	for _, b := range blob[leadZeros:] {
 		idx := capacity - 1
 		for carry := int(b); idx > outputSize || carry != 0; idx-- {
-			carry += int(output[idx]) << 8 // nolint: gomnd
+			carry += int(output[idx]) << 8 //nolint: gomnd
 			output[idx] = byte(carry % alphabetSize)
 			carry /= alphabetSize
 		}

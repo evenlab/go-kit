@@ -23,7 +23,7 @@ func Benchmark_wrapper_Error(b *testing.B) {
 
 func Benchmark_wrapper_Unwrap(b *testing.B) {
 	wrapErr := errKIT.WrapErr(wrapErrorMsg, errKIT.New(testErrorMsg))
-	err, ok := wrapErr.(errKIT.Wrapper) // nolint: errorlint
+	err, ok := wrapErr.(errKIT.Wrapper) //nolint: errorlint
 	if !ok {
 		log.Fatal("got not wrapper interface")
 	}
@@ -59,7 +59,7 @@ func Test_wrapper_Error(t *testing.T) {
 
 			got := errKIT.WrapErr(testErrorMsg, errKIT.New(wrapErrorMsg)).Error()
 			if (got != test.want) != test.wantErr {
-				t.Errorf("Error() got: %v | want: %v", got, test.wantErr)
+				t.Errorf("Error() got: %v | want: %v", got, test.want)
 			}
 		})
 	}

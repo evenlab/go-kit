@@ -1,3 +1,3 @@
 module github.com/evenlab/go-kit/errors
 
-go 1.17
+go 1.20

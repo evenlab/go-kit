@@ -9,18 +9,26 @@ linters:
   disable:
     - containedctx # overhead
     - cyclop # overhead
+    - deadcode # deprecated
     - dupl # overhead
     - exhaustivestruct # overhead
+    - exhaustruct # overhead
     - gofumpt # overhead
     - gochecknoglobals # overhead
     - goimports # overhead
     - golint # deprecated
+    - ifshort # deprecated
+    - interfacebloat # overhead
     - interfacer # deprecated
     - ireturn # overhead
     - maligned # deprecated
+    - nonamedreturns # overhead
+    - nosnakecase # deprecated
     - scopelint # deprecated
+    - structcheck # deprecated
     - tagliatelle # overhead
     - testpackage # overhead
+    - varcheck # overhead
     - varnamelen # overhead
     - wrapcheck # overhead
     - wsl # overhead
@@ -90,6 +98,7 @@ issues:
     - path: _test\.go
       linters:
         - dupl
+        - exhaustruct
         - errcheck
         - gochecknoglobals
         - gocritic

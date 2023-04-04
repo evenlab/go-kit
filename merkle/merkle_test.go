@@ -98,12 +98,12 @@ func Test_TreeStore_Root(t *testing.T) {
 		{
 			name: "case_1_OK",
 			tree: treeCase1,
-			want: treeCase1[len(treeCase1)-1], // root is the last element in the the list
+			want: treeCase1[len(treeCase1)-1], // root is the last element in the list
 		},
 		{
 			name: "case_5_OK",
 			tree: treeCase5,
-			want: treeCase5[len(treeCase5)-1], // root is the last element in the the list
+			want: treeCase5[len(treeCase5)-1], // root is the last element in the list
 		},
 		{
 			name: merkle.ErrMerkleTreeBuiltImproperlyMsg + "_ERR",

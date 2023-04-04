@@ -8,7 +8,7 @@ import (
 
 // As wraps function errors.As
 // to avoid import errors package from standard library.
-func As(err error, target *error) bool {
+func As(err error, target any) bool {
 	return errors.As(err, target)
 }
 
