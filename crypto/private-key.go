@@ -4,7 +4,7 @@ package crypto
 
 import (
 	"github.com/evenlab/go-kit/errors"
-	cc "github.com/libp2p/go-libp2p-core/crypto"
+	cc "github.com/libp2p/go-libp2p/core/crypto"
 )
 
 type (

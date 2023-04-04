@@ -27,6 +27,7 @@ type (
 // children nodes.
 //
 // A diagram depicting how this works for transactions where h(x) is a sha256 follows:
+//
 //	         root = h1234 = h(h12 + h34)
 //	        /                           \
 //	  h12 = h(h1 + h2)            h34 = h(h3 + h4)
@@ -44,7 +45,7 @@ type (
 // with only a single left node are calculated by concatenating the left node
 // with itself before hashing.
 // This function uses nodes that are pointers to the hashes, empty nodes will be nil.
-func BuildTreeStore(iter Iterator) (TreeStore, error) { // nolint: cyclop
+func BuildTreeStore(iter Iterator) (TreeStore, error) { //nolint: cyclop
 	if iter == nil {
 		return nil, errors.ErrNilPointerValue()
 	}
@@ -62,7 +63,7 @@ func BuildTreeStore(iter Iterator) (TreeStore, error) { // nolint: cyclop
 		nextPoT = 1 << exponent // 2^exponent
 	}
 
-	size := nextPoT*2 - 1 // nolint: gomnd
+	size := nextPoT*2 - 1 //nolint: gomnd
 	store := make(TreeStore, size)
 
 	// create the base transaction hashes and populate the array with them
@@ -75,7 +76,7 @@ func BuildTreeStore(iter Iterator) (TreeStore, error) { // nolint: cyclop
 	}
 
 	// start offset after the last entry and adjusted to the next power of two
-	for i, l, offset := 0, size-1, nextPoT; i < l; i, offset = i+2, offset+1 { // nolint: gomnd
+	for i, l, offset := 0, size-1, nextPoT; i < l; i, offset = i+2, offset+1 { //nolint: gomnd
 		switch {
 		// when there is no left child node, the parent is nil too
 		case store[i].Empty():

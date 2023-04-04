@@ -1,5 +1,4 @@
 github.com/evenlab/go-kit/bytes v1.0.0 h1:lWwwo+fJCgGBS/cSd5Lm7xmt+o+G/2prnImHZhjf0xo=
 github.com/evenlab/go-kit/bytes v1.0.0/go.mod h1:7wSaEg4jWXj+YdrmiRQeCiqNf7OVy2X3VbUzEj6SyCo=
-github.com/evenlab/go-kit/errors v0.0.0-20220321112014-0840eb6721e6/go.mod h1:v78izEg5BzsByKcU7NfmTX8uxltGC8xOUJMqkrlz1Ds=
 github.com/evenlab/go-kit/errors v1.0.0 h1:iz6PLHkzZFszOjy7nBJHy0Ntbcsp58+RBPYKSdVM9JQ=
 github.com/evenlab/go-kit/errors v1.0.0/go.mod h1:v78izEg5BzsByKcU7NfmTX8uxltGC8xOUJMqkrlz1Ds=

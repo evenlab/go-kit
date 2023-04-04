@@ -1,6 +1,6 @@
 module github.com/evenlab/go-kit/merkle
 
-go 1.17
+go 1.20
 
 require (
 	github.com/evenlab/go-kit/bytes v1.0.0
@@ -9,18 +9,17 @@ require (
 )
 
 require (
-	github.com/btcsuite/btcd v0.22.0-beta // indirect
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.1.0 // indirect
 	github.com/evenlab/go-kit/base58 v1.0.0 // indirect
 	github.com/evenlab/go-kit/equal v1.0.0 // indirect
-	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/cpuid/v2 v2.0.12 // indirect
-	github.com/libp2p/go-libp2p-core v0.14.0 // indirect
-	github.com/libp2p/go-openssl v0.0.7 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
+	github.com/libp2p/go-libp2p v0.26.4 // indirect
+	github.com/libp2p/go-libp2p-core v0.20.1 // indirect
 	github.com/minio/sha256-simd v1.0.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/spacemonkeygo/spacelog v0.0.0-20180420211403-2296661a0572 // indirect
-	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/protobuf v1.30.0 // indirect
 )

@@ -3,7 +3,7 @@
 package crypto
 
 import (
-	cc "github.com/libp2p/go-libp2p-core/crypto"
+	cc "github.com/libp2p/go-libp2p/core/crypto"
 )
 
 const (

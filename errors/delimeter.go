@@ -7,9 +7,9 @@ import (
 )
 
 var (
-	delimiter = ": " // nolint: gochecknoglobals
+	delimiter = ": " //nolint: gochecknoglobals
 
-	rwDelimMutex = sync.RWMutex{} // nolint: gochecknoglobals
+	rwDelimMutex = sync.RWMutex{} //nolint: gochecknoglobals
 )
 
 // GetDelimiter returns current use delimiter chars for wrap errors.

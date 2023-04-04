@@ -75,11 +75,11 @@ var (
 
 	// Canceled is the error returned by Context.Err
 	// when the context is canceled.
-	Canceled = ctx.Canceled // nolint:gochecknoglobals
+	Canceled = ctx.Canceled //nolint:gochecknoglobals
 
 	// DeadlineExceeded is the error returned by Context.Err
 	// when the context's deadline passes.
-	DeadlineExceeded = ctx.DeadlineExceeded // nolint:gochecknoglobals
+	DeadlineExceeded = ctx.DeadlineExceeded //nolint:gochecknoglobals
 )
 
 // NewContext constructs context of the application.

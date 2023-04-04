@@ -1,10 +1,10 @@
 module github.com/evenlab/go-kit/timestamp
 
-go 1.17
+go 1.20
 
 require (
 	github.com/json-iterator/go v1.1.12
-	google.golang.org/protobuf v1.28.0
+	google.golang.org/protobuf v1.30.0
 )
 
 require (
