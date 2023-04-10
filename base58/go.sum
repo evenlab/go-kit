@@ -1,4 +1,4 @@
-github.com/evenlab/go-kit/bytes v1.0.0 h1:lWwwo+fJCgGBS/cSd5Lm7xmt+o+G/2prnImHZhjf0xo=
-github.com/evenlab/go-kit/bytes v1.0.0/go.mod h1:7wSaEg4jWXj+YdrmiRQeCiqNf7OVy2X3VbUzEj6SyCo=
-github.com/evenlab/go-kit/errors v1.0.0 h1:iz6PLHkzZFszOjy7nBJHy0Ntbcsp58+RBPYKSdVM9JQ=
-github.com/evenlab/go-kit/errors v1.0.0/go.mod h1:v78izEg5BzsByKcU7NfmTX8uxltGC8xOUJMqkrlz1Ds=
+github.com/evenlab/go-kit/bytes v1.1.0 h1:dGUslUP5D+4muercJoBIgs5CEH2Hg6HVmjstT3nl6JE=
+github.com/evenlab/go-kit/bytes v1.1.0/go.mod h1:4BDS18rF85v37MvuwDBbVCYEqowcLZhxFKw9bW8rbms=
+github.com/evenlab/go-kit/errors v1.1.0 h1:DjJVtJt2e6VzAofGYO1wEYfJh0iGUwc0BsHTUUPWmOs=
+github.com/evenlab/go-kit/errors v1.1.0/go.mod h1:i49TuO9TS/ZpuGzb0NlT0eXqcsdSYJccD4F8sOo4PnY=
